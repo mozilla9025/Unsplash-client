@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="app.wallpaper">
+          xmlns:tools="http://schemas.android.com/tools" package="app.wallpaper">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -11,5 +11,17 @@
             android:label="@string/app_name"
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme">
+
+        <activity android:name=".modules.MainActivity"
+                  android:screenOrientation="unspecified"
+                  android:windowSoftInputMode="adjustPan">
+            <intent-filter android:autoVerify="true" tools:targetApi="m">
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.VIEW"/>
+            </intent-filter>
+        </activity>
+    </application>
+
 </manifest>
