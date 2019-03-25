@@ -1,32 +1,22 @@
 package app.wallpaper.app
 
 import android.app.Application
-import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import app.wallpaper.di.ApplicationComponent
+import app.wallpaper.di.DaggerApplicationComponent
+import app.wallpaper.di.NetworkModule
 
 class ApplicationLoader : Application() {
-//    lateinit var applicationComponent: ApplicationComponent
+    private lateinit var applicationComponent: ApplicationComponent
 
     override fun onCreate() {
         super.onCreate()
 
         instance = this
-        setup()
-    }
 
-    fun setup() {
-//        applicationComponent = DaggerApplicationComponent.builder()
-//            .appModule(new AppModule(this))
-//            .netModule(new NetModule())
-//            .realmModule(new RealmModule(this))
-//            .build();
+        applicationComponent = DaggerApplicationComponent.builder()
+            .networkModule(NetworkModule())
+            .build()
     }
-
-//    fun getApplicationComponent(): ApplicationComponent {
-//        return applicationComponent
-//    }
 
     companion object {
         lateinit var instance: ApplicationLoader private set
