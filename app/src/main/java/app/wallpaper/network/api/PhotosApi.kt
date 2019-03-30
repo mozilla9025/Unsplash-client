@@ -22,6 +22,4 @@ interface PhotosApi {
     @GET("/photos/{id}")
     fun getPhotos(@Path("id") id: String): Observable<Response<ResponseBody>>
 
-
-
 }
