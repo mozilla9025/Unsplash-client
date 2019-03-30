@@ -15,7 +15,10 @@ android {
         renderscriptTargetApi 21
         renderscriptSupportModeEnabled true
         vectorDrawables.useSupportLibrary true
+        buildConfigField 'String', "ApiKey", api_key
+        buildConfigField 'String', "ApiSecret", api_secret
     }
+
     buildTypes {
         release {
             minifyEnabled false

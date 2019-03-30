@@ -1,7 +1,10 @@
 package app.wallpaper.di
 
 import android.app.Application
+import app.wallpaper.R
+import app.wallpaper.app.ApplicationLoader
 import app.wallpaper.app.Constants
+import app.wallpaper.preferences.PreferencesManager
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -31,6 +34,12 @@ open class NetworkModule {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         client.addInterceptor(loggingInterceptor)
+//        client.addInterceptor { chain ->
+//            val request = chain.request().newBuilder()
+//                .addHeader("Authorization", ApplicationLoader.instance.getString(R.string.app_name))
+//                .build()
+//            chain.proceed(request)
+//        }
 
         client.cache(cache)
         return client.build()
