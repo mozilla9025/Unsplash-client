@@ -20,5 +20,6 @@ class ApplicationLoader : Application() {
 
     companion object {
         lateinit var instance: ApplicationLoader private set
+
     }
 }
