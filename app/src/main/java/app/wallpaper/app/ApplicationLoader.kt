@@ -1,12 +1,9 @@
 package app.wallpaper.app
 
 import android.app.Application
-import app.wallpaper.di.ApplicationComponent
-import app.wallpaper.di.DaggerApplicationComponent
-import app.wallpaper.di.NetworkModule
+import app.wallpaper.di.*
 
 class ApplicationLoader : Application() {
-    private lateinit var applicationComponent: ApplicationComponent
 
     override fun onCreate() {
         super.onCreate()
@@ -14,12 +11,15 @@ class ApplicationLoader : Application() {
         instance = this
 
         applicationComponent = DaggerApplicationComponent.builder()
+            .appModule(AppModule(this))
             .networkModule(NetworkModule())
+            .apiModule(ApiModule())
+            .apiControllerModule(ApiControllerModule())
             .build()
     }
 
     companion object {
-        lateinit var instance: ApplicationLoader private set
-
+        lateinit var instance: ApplicationLoader
+        lateinit var applicationComponent: ApplicationComponent
     }
 }

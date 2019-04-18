@@ -9,7 +9,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (unbinder != null)
-            unbinder!!.unbind()
+        unbinder?.unbind()
     }
 }

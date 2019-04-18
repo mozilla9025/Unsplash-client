@@ -1,8 +1,11 @@
 package app.wallpaper.di
 
+import app.wallpaper.modules.MainViewModel
 import dagger.Component
+import javax.inject.Singleton
 
-@Component(modules = arrayOf(NetworkModule::class))
+@Singleton
+@Component(modules = [AppModule::class, NetworkModule::class, ApiModule::class, ApiControllerModule::class])
 interface ApplicationComponent {
-
+    fun inject(activity: MainViewModel)
 }

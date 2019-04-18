@@ -11,6 +11,4 @@ interface CurrentUserApi {
     @GET("/me")
     fun getCurrentUser(): Observable<Response<ResponseBody>>
 
-    @PUT("/me")
-    fun updateCurrentUser(): Observable<Response<ResponseBody>>
 }
