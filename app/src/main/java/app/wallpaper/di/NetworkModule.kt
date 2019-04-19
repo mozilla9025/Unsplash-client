@@ -1,6 +1,7 @@
 package app.wallpaper.di
 
 import android.app.Application
+import app.wallpaper.BuildConfig
 import app.wallpaper.app.Constants
 import dagger.Module
 import dagger.Provides
@@ -13,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Module
-open class NetworkModule{
+open class NetworkModule {
 
     @Provides
     fun provideHttpCache(application: Application): Cache {
@@ -28,8 +29,11 @@ open class NetworkModule{
             .readTimeout(1, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
 
+        client.addInterceptor(HeaderInterceptor(BuildConfig.ApiKey))
+
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
         client.addInterceptor(loggingInterceptor)
 
         client.cache(cache)

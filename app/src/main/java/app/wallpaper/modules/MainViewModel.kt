@@ -24,8 +24,6 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
             photosApiController.getPhotos(0, 10, Order.LATEST)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe
-                { Log.i("TAG", "On subscribe") }
                 .subscribe({ response -> Log.i("TAG", response.isSuccessful.toString()) },
                     { error -> Log.e("TAG", "", error) })
         )

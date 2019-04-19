@@ -18,8 +18,7 @@ open class MainActivity : BaseActivity() {
     ) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Toast.makeText(this, "Main activity created", Toast.LENGTH_SHORT).show()
-        Log.i("TAG", "onCreate")
+
         viewModel.getPhotos()
     }
 }
