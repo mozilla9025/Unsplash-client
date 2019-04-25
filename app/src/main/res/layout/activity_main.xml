@@ -17,10 +17,16 @@
     <!--app:layout_constraintTop_toTopOf="parent"-->
     <!--app:navGraph="@navigation/main_navigation"/>-->
 
-    <app.wallpaper.widget.BottomNavigationView
+    <app.wallpaper.widget.NavigationView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="72dp"
         android:layout_gravity="bottom"
-        app:elevation="@dimen/dp8" />
+        app:itemIconSize="@dimen/dp28"
+        android:background="@color/lightGray"
+        app:itemRippleColor="@null"
+        app:itemTextAppearanceActive="@null"
+        app:itemTextAppearanceInactive="@null"
+        app:itemTextAppearance="@null"
+        app:menu="@menu/bottom_navigation_menu" />
 
 </FrameLayout>
