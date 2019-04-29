@@ -1,11 +1,9 @@
-package app.wallpaper.modules
+package app.wallpaper.modules.main
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import app.wallpaper.R
+import app.wallpaper.modules.base.BaseActivity
 
 open class MainActivity : BaseActivity() {
 

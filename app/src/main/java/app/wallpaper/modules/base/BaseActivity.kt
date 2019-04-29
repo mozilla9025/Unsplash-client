@@ -1,4 +1,4 @@
-package app.wallpaper.modules
+package app.wallpaper.modules.base
 
 import androidx.appcompat.app.AppCompatActivity
 import butterknife.Unbinder

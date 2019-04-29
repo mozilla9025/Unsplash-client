@@ -1,12 +1,11 @@
 package app.wallpaper.modules.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import app.wallpaper.R
-import app.wallpaper.modules.BaseFragment
+import app.wallpaper.modules.base.BaseFragment
 import butterknife.ButterKnife
 
 class HomeFragment : BaseFragment() {

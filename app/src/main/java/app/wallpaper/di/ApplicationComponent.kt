@@ -1,6 +1,6 @@
 package app.wallpaper.di
 
-import app.wallpaper.modules.MainViewModel
+import app.wallpaper.modules.main.MainViewModel
 import dagger.Component
 import javax.inject.Singleton
 

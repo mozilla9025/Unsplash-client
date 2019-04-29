@@ -1,4 +1,4 @@
-package app.wallpaper.modules.search
+package app.wallpaper.modules.add
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,11 @@ import app.wallpaper.R
 import app.wallpaper.modules.base.BaseFragment
 import butterknife.ButterKnife
 
-class SearchFragment : BaseFragment() {
+class AddFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_search, container, false)
+        val view = inflater.inflate(R.layout.fragment_add, container, false)
         unbinder = ButterKnife.bind(this, view)
         return view
     }

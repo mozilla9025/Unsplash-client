@@ -1,4 +1,4 @@
-package app.wallpaper.modules
+package app.wallpaper.modules.base
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
