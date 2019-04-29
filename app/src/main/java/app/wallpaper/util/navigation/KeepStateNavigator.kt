@@ -26,7 +26,7 @@ class KeepStateNavigator(
 
         val currentFragment = manager.primaryNavigationFragment
         if (currentFragment != null) {
-            transaction.detach(currentFragment)
+            transaction.hide(currentFragment)
         }
 
         var fragment = manager.findFragmentByTag(tag)
@@ -35,7 +35,7 @@ class KeepStateNavigator(
             fragment = instantiateFragment(context, manager, className, args)
             transaction.add(containerId, fragment, tag)
         } else {
-            transaction.attach(fragment)
+            transaction.show(fragment)
         }
 
         transaction.setPrimaryNavigationFragment(fragment)

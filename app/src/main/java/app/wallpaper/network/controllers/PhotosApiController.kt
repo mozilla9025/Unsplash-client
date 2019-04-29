@@ -1,6 +1,7 @@
 package app.wallpaper.network.controllers
 
 import app.wallpaper.data.Order
+import app.wallpaper.data.Photo
 import app.wallpaper.network.api.PhotosApi
 import io.reactivex.Observable
 import okhttp3.ResponseBody
@@ -12,7 +13,7 @@ open class PhotosApiController(
 
     fun getPhotos(
         page: Int, perPage: Int, orderBy: Order
-    ): Observable<Response<ResponseBody>> {
+    ): Observable<List<Photo>> {
         return api.getPhotos(page, perPage, orderBy.value)
     }
 

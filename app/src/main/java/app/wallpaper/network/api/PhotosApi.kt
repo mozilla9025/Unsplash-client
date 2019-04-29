@@ -1,5 +1,6 @@
 package app.wallpaper.network.api
 
+import app.wallpaper.data.Photo
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -12,7 +13,7 @@ interface PhotosApi {
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,
         @Query("order_by") orderBy: String
-    ): Observable<Response<ResponseBody>>
+    ): Observable<List<Photo>>
 
     @GET("/photos/{id}")
     fun getPhotos(@Path("id") id: String): Observable<Response<ResponseBody>>
