@@ -15,6 +15,8 @@ import app.wallpaper.modules.base.BaseFragment
 import app.wallpaper.modules.home.HomeViewModel
 import app.wallpaper.network.responses.PhotoResponse
 import app.wallpaper.network.responses.ResponseStatus
+import app.wallpaper.util.MarginItemDecoration
+import app.wallpaper.util.extentions.dp
 import butterknife.BindView
 import butterknife.ButterKnife
 
@@ -39,6 +41,7 @@ class PhotosFragment : BaseFragment() {
         adapter = PhotoAdapter(null)
         rvPhotos.adapter = adapter
         rvPhotos.layoutManager = LinearLayoutManager(context!!)
+        rvPhotos.addItemDecoration(MarginItemDecoration(8.dp, 0.dp))
         observeData()
 
         viewModel.getPhotos()

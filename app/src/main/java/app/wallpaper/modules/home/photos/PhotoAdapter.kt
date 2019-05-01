@@ -39,12 +39,26 @@ class PhotoAdapter(var data: List<Photo>?) : RecyclerView.Adapter<PhotoAdapter.P
 
     inner class PhotoItemViewHolder(itemView: View) : BaseViewHolder<Photo>(itemView) {
         override fun bind(item: Photo) {
+
+            val placeholder = ColorDrawable(Color.parseColor(item.color))
+
             Glide.with(itemView)
                     .load(item.urls.regular)
                     .apply(RequestOptions()
-                            .placeholder(ColorDrawable(Color.parseColor(item.color))))
-                    .transition(DrawableTransitionOptions.withCrossFade())
+                            .placeholder(placeholder)
+                            .centerCrop())
+                    .transition(DrawableTransitionOptions.withCrossFade(200))
                     .into(itemView.iv_image)
+
+            Glide.with(itemView)
+                    .load(item.user.avatar.medium)
+                    .apply(RequestOptions()
+                            .placeholder(placeholder)
+                            .centerCrop())
+                    .transition(DrawableTransitionOptions.withCrossFade(200))
+                    .into(itemView.iv_avatar)
+
+            itemView.tv_name.text = item.user.name
         }
     }
 }
