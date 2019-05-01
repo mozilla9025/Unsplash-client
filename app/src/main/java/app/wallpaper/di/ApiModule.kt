@@ -1,9 +1,6 @@
 package app.wallpaper.di
 
-import app.wallpaper.network.api.CurrentUserApi
-import app.wallpaper.network.api.PhotosApi
-import app.wallpaper.network.api.SearchApi
-import app.wallpaper.network.api.UserApi
+import app.wallpaper.network.api.*
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -29,6 +26,11 @@ open class ApiModule {
     @Provides
     fun provideUserApi(retrofit: Retrofit): UserApi {
         return retrofit.create(UserApi::class.java)
+    }
+
+    @Provides
+    fun provideCollectionApi(retrofit: Retrofit): CollectionApi {
+        return retrofit.create(CollectionApi::class.java)
     }
 
 }

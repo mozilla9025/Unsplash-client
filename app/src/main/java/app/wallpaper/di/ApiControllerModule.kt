@@ -1,7 +1,9 @@
 package app.wallpaper.di
 
+import app.wallpaper.network.api.CollectionApi
 import app.wallpaper.network.api.CurrentUserApi
 import app.wallpaper.network.api.PhotosApi
+import app.wallpaper.network.controllers.CollectionApiController
 import app.wallpaper.network.controllers.CurrentUserApiController
 import app.wallpaper.network.controllers.PhotosApiController
 import dagger.Module
@@ -18,5 +20,10 @@ open class ApiControllerModule {
     @Provides
     fun providePhotosApiController(api: PhotosApi): PhotosApiController {
         return PhotosApiController(api)
+    }
+
+    @Provides
+    fun provideCollectionApiController(api: CollectionApi): CollectionApiController {
+        return CollectionApiController(api)
     }
 }

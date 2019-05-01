@@ -7,7 +7,7 @@ import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Response
 
-open class PhotosApiController(
+class PhotosApiController(
     private val api: PhotosApi
 ) {
 
@@ -17,7 +17,7 @@ open class PhotosApiController(
         return api.getPhotos(page, perPage, orderBy.value)
     }
 
-    fun getPhotos(id: String): Observable<Response<ResponseBody>> {
+    fun getPhotos(id: String): Observable<List<Photo>> {
         return api.getPhotos(id)
     }
 

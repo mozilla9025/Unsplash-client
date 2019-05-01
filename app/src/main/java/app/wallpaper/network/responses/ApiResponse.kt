@@ -1,38 +1,10 @@
 package app.wallpaper.network.responses
 
-import android.util.Log
+interface ApiResponse<T> {
 
-data class ApiResponse(var status: ResponseStatus) {
+    fun loading(): T
 
-    var data: Any? = null
-    var error: Throwable? = null
+    fun <V> success(data: V): T
 
-    init {
-        Log.i("ApiResponse", "$this ${this.hashCode()}")
-    }
-
-    constructor(status: ResponseStatus, data: Any) : this(status) {
-        this.data = data
-    }
-
-    constructor(status: ResponseStatus, error: Throwable) : this(status) {
-        this.error = error
-    }
-
-    companion object {
-        @JvmStatic
-        fun loading(): ApiResponse {
-            return ApiResponse(ResponseStatus.LOADING)
-        }
-
-        @JvmStatic
-        fun success(data: Any): ApiResponse {
-            return ApiResponse(ResponseStatus.SUCCESS, data)
-        }
-
-        @JvmStatic
-        fun failure(error: Throwable): ApiResponse {
-            return ApiResponse(ResponseStatus.FAILURE, error)
-        }
-    }
+    fun failure(error: Throwable): T
 }

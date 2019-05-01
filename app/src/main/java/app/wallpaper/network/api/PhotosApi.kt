@@ -16,7 +16,7 @@ interface PhotosApi {
     ): Observable<List<Photo>>
 
     @GET("/photos/{id}")
-    fun getPhotos(@Path("id") id: String): Observable<Response<ResponseBody>>
+    fun getPhotos(@Path("id") id: String): Observable<List<Photo>>
 
     @GET("/photos/{id}/download")
     fun getDownloadUrl(@Path("id") id: String): Observable<Response<ResponseBody>>

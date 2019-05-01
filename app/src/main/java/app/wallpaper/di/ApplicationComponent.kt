@@ -1,6 +1,8 @@
 package app.wallpaper.di
 
+import app.wallpaper.modules.home.collections.CollectionsViewModel
 import app.wallpaper.modules.home.HomeViewModel
+import app.wallpaper.modules.home.photos.PhotosViewModel
 import app.wallpaper.modules.main.MainViewModel
 import dagger.Component
 import javax.inject.Singleton
@@ -10,4 +12,6 @@ import javax.inject.Singleton
 interface ApplicationComponent {
     fun inject(viewModel: MainViewModel)
     fun inject(viewModel: HomeViewModel)
+    fun inject(viewModel: CollectionsViewModel)
+    fun inject(viewModel: PhotosViewModel)
 }

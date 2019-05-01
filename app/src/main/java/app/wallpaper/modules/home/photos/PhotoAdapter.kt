@@ -1,4 +1,4 @@
-package app.wallpaper.modules.home
+package app.wallpaper.modules.home.photos
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -8,13 +8,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
 import app.wallpaper.data.Photo
+import app.wallpaper.modules.base.BaseAdapter
+import app.wallpaper.modules.base.BaseViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.item_photo.view.*
 
-class HomeAdapter(var data: List<Photo>?) :
-        RecyclerView.Adapter<HomeAdapter.PhotoItemViewHolder>() {
+class PhotoAdapter(var data: List<Photo>?) : RecyclerView.Adapter<PhotoAdapter.PhotoItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoItemViewHolder {
         return PhotoItemViewHolder(LayoutInflater.from(parent.context)
@@ -36,13 +37,12 @@ class HomeAdapter(var data: List<Photo>?) :
         notifyDataSetChanged()
     }
 
-    inner class PhotoItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        fun bind(photo: Photo) {
+    inner class PhotoItemViewHolder(itemView: View) : BaseViewHolder<Photo>(itemView) {
+        override fun bind(item: Photo) {
             Glide.with(itemView)
-                    .load(photo.urls.regular)
+                    .load(item.urls.regular)
                     .apply(RequestOptions()
-                            .placeholder(ColorDrawable(Color.parseColor(photo.color))))
+                            .placeholder(ColorDrawable(Color.parseColor(item.color))))
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(itemView.iv_image)
         }

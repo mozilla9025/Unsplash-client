@@ -5,7 +5,7 @@ import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Response
 
-open class CurrentUserApiController(
+class CurrentUserApiController(
     private val currentUserApi: CurrentUserApi
 ) {
     fun getCurrentUser(): Observable<Response<ResponseBody>> {

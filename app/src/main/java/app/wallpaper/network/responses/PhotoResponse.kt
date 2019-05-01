@@ -2,10 +2,15 @@ package app.wallpaper.network.responses
 
 import app.wallpaper.data.Photo
 
-data class PhotoResponse(val status: ResponseStatus) {
+class PhotoResponse() : ApiResponse<PhotoResponse> {
 
+    var status: ResponseStatus? = null
     var data: List<Photo>? = null
     var error: Throwable? = null
+
+    constructor(status: ResponseStatus) : this() {
+        this.status = status
+    }
 
     constructor(status: ResponseStatus, data: List<Photo>) : this(status) {
         this.data = data
@@ -16,20 +21,19 @@ data class PhotoResponse(val status: ResponseStatus) {
     }
 
     companion object {
-        @JvmStatic
-        fun loading(): PhotoResponse {
-            return PhotoResponse(ResponseStatus.LOADING)
-        }
+        val instance: PhotoResponse = PhotoResponse()
+    }
 
-        @JvmStatic
-        fun success(data: List<Photo>): PhotoResponse {
-            return PhotoResponse(ResponseStatus.SUCCESS, data)
-        }
+    override fun loading(): PhotoResponse {
+        return PhotoResponse(ResponseStatus.LOADING)
+    }
 
-        @JvmStatic
-        fun failure(error: Throwable): PhotoResponse {
-            return PhotoResponse(ResponseStatus.FAILURE, error)
-        }
+    override fun <V> success(data: V): PhotoResponse {
+        return PhotoResponse(ResponseStatus.SUCCESS, data as List<Photo>)
+    }
+
+    override fun failure(error: Throwable): PhotoResponse {
+        return PhotoResponse(ResponseStatus.FAILURE, error)
     }
 
 }
