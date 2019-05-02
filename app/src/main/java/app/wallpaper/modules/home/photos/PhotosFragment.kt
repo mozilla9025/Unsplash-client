@@ -41,7 +41,7 @@ class PhotosFragment : BaseFragment() {
         adapter = PhotoAdapter(null)
         rvPhotos.adapter = adapter
         rvPhotos.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
-        rvPhotos.addItemDecoration(MarginItemDecoration(8.dp, 0.dp))
+        rvPhotos.addItemDecoration(MarginItemDecoration(4.dp, 0.dp))
 
         observeData()
 

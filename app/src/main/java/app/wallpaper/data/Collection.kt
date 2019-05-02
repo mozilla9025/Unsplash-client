@@ -14,6 +14,7 @@ data class Collection(
         @SerializedName("share_key") val shareKey: String,
         @SerializedName("cover_photo") val coverPhoto: Photo,
         @SerializedName("user") val user: User,
-        @SerializedName("links") val links: CollectionLinks
+        @SerializedName("links") val links: CollectionLinks,
+        @SerializedName("preview_photos") val previews: List<Photo>
 ) {
 }

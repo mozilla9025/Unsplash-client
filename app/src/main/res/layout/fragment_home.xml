@@ -10,7 +10,8 @@
         android:elevation="@dimen/dp2">
     <com.google.android.material.appbar.CollapsingToolbarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_scrollFlags="scroll|enterAlways">
         <Toolbar
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbarHeight"
