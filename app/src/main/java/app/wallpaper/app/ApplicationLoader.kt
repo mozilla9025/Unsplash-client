@@ -1,9 +1,9 @@
 package app.wallpaper.app
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 import app.wallpaper.di.*
 
-class ApplicationLoader : Application() {
+class ApplicationLoader : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()

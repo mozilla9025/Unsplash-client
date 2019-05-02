@@ -1,4 +1,4 @@
-package app.wallpaper.util
+package app.wallpaper.util.recycler
 
 import android.graphics.Rect
 import android.view.View

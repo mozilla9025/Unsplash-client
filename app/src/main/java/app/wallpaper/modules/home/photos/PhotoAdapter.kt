@@ -2,11 +2,13 @@ package app.wallpaper.modules.home.photos
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
+import app.wallpaper.app.GlideApp
 import app.wallpaper.data.Photo
 import app.wallpaper.modules.base.BaseAdapter
 import app.wallpaper.modules.base.BaseViewHolder
@@ -40,23 +42,15 @@ class PhotoAdapter(var data: List<Photo>?) : RecyclerView.Adapter<PhotoAdapter.P
     inner class PhotoItemViewHolder(itemView: View) : BaseViewHolder<Photo>(itemView) {
         override fun bind(item: Photo) {
 
-            val placeholder = ColorDrawable(Color.parseColor(item.color))
+            GlideApp.with(itemView)
+                    .load(item.user.avatar.medium)
+                    .into(itemView.iv_avatar)
 
-            Glide.with(itemView)
+            GlideApp.with(itemView)
                     .load(item.urls.regular)
-                    .apply(RequestOptions()
-                            .placeholder(placeholder)
-                            .centerCrop())
+                    .placeholder(ColorDrawable(Color.parseColor(item.color)))
                     .transition(DrawableTransitionOptions.withCrossFade(200))
                     .into(itemView.iv_image)
-
-            Glide.with(itemView)
-                    .load(item.user.avatar.medium)
-                    .apply(RequestOptions()
-                            .placeholder(placeholder)
-                            .centerCrop())
-                    .transition(DrawableTransitionOptions.withCrossFade(200))
-                    .into(itemView.iv_avatar)
 
             itemView.tv_name.text = item.user.name
         }

@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
 import app.wallpaper.modules.base.BaseFragment
-import app.wallpaper.modules.home.HomeViewModel
 import app.wallpaper.network.responses.PhotoResponse
 import app.wallpaper.network.responses.ResponseStatus
-import app.wallpaper.util.MarginItemDecoration
+import app.wallpaper.util.recycler.MarginItemDecoration
 import app.wallpaper.util.extentions.dp
+import app.wallpaper.util.recycler.PrefetchLinearLayoutManager
 import butterknife.BindView
 import butterknife.ButterKnife
 
@@ -40,8 +40,9 @@ class PhotosFragment : BaseFragment() {
 
         adapter = PhotoAdapter(null)
         rvPhotos.adapter = adapter
-        rvPhotos.layoutManager = LinearLayoutManager(context!!)
+        rvPhotos.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         rvPhotos.addItemDecoration(MarginItemDecoration(8.dp, 0.dp))
+
         observeData()
 
         viewModel.getPhotos()
