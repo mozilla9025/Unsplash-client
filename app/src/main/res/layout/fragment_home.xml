@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         app:layout_scrollFlags="scroll|enterAlways">
         <Toolbar
+            android:id="@+id/toolbar_home"
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbarHeight"
             android:background="@color/lightGray"
@@ -28,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans"
                 android:includeFontPadding="false"
-                android:text="Unsplash"
+                android:text="Photos"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -36,10 +37,11 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
+                android:id="@+id/btn_filter"
                 android:layout_width="@dimen/dp32"
                 android:layout_height="@dimen/dp32"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_search"
+                android:src="@drawable/ic_filter"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -48,11 +50,18 @@
     </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/vp_main"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_photos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
         android:overScrollMode="never"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <app.wallpaper.widget.LoadingView
+        android:id="@+id/loading_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -13,9 +13,27 @@ import javax.inject.Inject
 
 class HomeViewModel(application: Application) : BaseViewModel(application) {
 
+    @Inject
+    lateinit var photosApiController: PhotosApiController
+
+    val photosLiveData: MutableLiveData<PhotoResponse> by lazy {
+        MutableLiveData<PhotoResponse>()
+    }
 
     init {
         ApplicationLoader.applicationComponent.inject(this)
     }
 
+    fun getPhotos() {
+        disposables.add(
+                photosApiController.getPhotos(0, 30, Order.LATEST)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe { photosLiveData.setValue(PhotoResponse.instance.loading()) }
+                        .subscribe({ response ->
+                            photosLiveData.setValue(PhotoResponse.instance.success(response))
+                        },
+                                { error -> photosLiveData.setValue(PhotoResponse.instance.failure(error)) })
+        )
+    }
 }

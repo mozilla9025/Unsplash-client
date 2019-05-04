@@ -14,4 +14,94 @@
         <item name="android:splitMotionEvents">false</item>
     </style>
 
+ <style name="CircularProgress">
+        <item name="cpd_padding">0dp</item>
+        <item name="cpd_initialAngle">0</item>
+        <item name="cpd_maxSweepAngle">270</item>
+        <item name="cpd_minSweepAngle">1</item>
+        <item name="cpd_strokeSize">@dimen/dp4</item>
+        <item name="cpd_strokeColor">@color/blue</item>
+        <item name="cpd_strokeSecondaryColor">@color/lightBlue</item>
+        <item name="cpd_reverse">false</item>
+        <item name="cpd_rotateDuration">1000</item>
+        <item name="cpd_transformDuration">600</item>
+        <item name="cpd_keepDuration">200</item>
+        <item name="cpd_transformInterpolator">@android:anim/decelerate_interpolator</item>
+        <item name="pv_progressMode">indeterminate</item>
+        <item name="cpd_inAnimDuration">0</item>
+        <item name="cpd_outAnimDuration">@android:integer/config_mediumAnimTime</item>
+    </style>
+
+    <style name="CircularProgress.Determinate" parent="CircularProgress">
+        <item name="pv_progressMode">determinate</item>
+        <item name="cpd_inAnimDuration">@android:integer/config_mediumAnimTime</item>
+    </style>
+
+    <style name="LinearProgress">
+        <item name="lpd_maxLineWidth">75%</item>
+        <item name="lpd_minLineWidth">10%</item>
+        <item name="lpd_strokeSize">4dp</item>
+        <item name="lpd_strokeColor">?attr/colorPrimary</item>
+        <item name="lpd_strokeSecondaryColor">?attr/colorControlNormal</item>
+        <item name="lpd_reverse">false</item>
+        <item name="lpd_travelDuration">1000</item>
+        <item name="lpd_transformDuration">600</item>
+        <item name="lpd_keepDuration">200</item>
+        <item name="lpd_transformInterpolator">@android:anim/decelerate_interpolator</item>
+        <item name="pv_progressMode">indeterminate</item>
+        <item name="lpd_inAnimDuration">@android:integer/config_mediumAnimTime</item>
+        <item name="lpd_outAnimDuration">@android:integer/config_mediumAnimTime</item>
+        <item name="lpd_verticalAlign">bottom</item>
+    </style>
+
+    <style name="LinearProgress.Determinate" parent="LinearProgress">
+        <item name="pv_progressMode">determinate</item>
+    </style>
+
+    <style name="LinearProgress.Query" parent="LinearProgress">
+        <item name="pv_progressMode">query</item>
+    </style>
+
+    <style name="LinearProgress.Buffer" parent="LinearProgress">
+        <item name="pv_progressMode">buffer</item>
+    </style>
+
+    <style name="ProgressView">
+        <item name="pv_progress">0</item>
+    </style>
+
+    <style name="ProgressView.Circular" parent="ProgressView">
+        <item name="pv_autostart">true</item>
+        <item name="pv_circular">true</item>
+        <item name="pv_progressStyle">@style/CircularProgress</item>
+        <item name="pv_progressMode">indeterminate</item>
+    </style>
+
+    <style name="ProgressView.Circular.Determinate" parent="ProgressView.Circular">
+        <item name="pv_progressStyle">@style/CircularProgress.Determinate</item>
+        <item name="pv_progressMode">determinate</item>
+    </style>
+
+    <style name="ProgressView.Linear" parent="ProgressView">
+        <item name="pv_autostart">true</item>
+        <item name="pv_circular">false</item>
+        <item name="pv_progressStyle">@style/LinearProgress</item>
+        <item name="pv_progressMode">indeterminate</item>
+    </style>
+
+    <style name="ProgressView.Linear.Determinate" parent="ProgressView.Linear">
+        <item name="pv_progressStyle">@style/LinearProgress.Determinate</item>
+        <item name="pv_progressMode">determinate</item>
+    </style>
+
+    <style name="ProgressView.Linear.Query" parent="ProgressView.Linear">
+        <item name="pv_progressStyle">@style/LinearProgress.Query</item>
+        <item name="pv_progressMode">query</item>
+    </style>
+
+    <style name="ProgressView.Linear.Buffer" parent="ProgressView.Linear">
+        <item name="pv_progressStyle">@style/LinearProgress.Buffer</item>
+        <item name="pv_progressMode">buffer</item>
+    </style>
+
 </resources>

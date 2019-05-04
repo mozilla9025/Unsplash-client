@@ -1,8 +1,7 @@
-package app.wallpaper.modules.home.photos
+package app.wallpaper.modules.home
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
 import app.wallpaper.app.GlideApp
 import app.wallpaper.data.Photo
-import app.wallpaper.modules.base.BaseAdapter
 import app.wallpaper.modules.base.BaseViewHolder
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.item_photo.view.*
 
 class PhotoAdapter(var data: List<Photo>?) : RecyclerView.Adapter<PhotoAdapter.PhotoItemViewHolder>() {

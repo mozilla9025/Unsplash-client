@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <keep_state_fragment
-        android:id="@+id/searchFragment"
-        android:name="app.wallpaper.modules.search.SearchFragment"
-        android:label="SearchFragment"
-        tools:layout="@layout/fragment_search" />
+        android:id="@+id/collectionsFragment"
+        android:name="app.wallpaper.modules.collections.CollectionsFragment"
+        android:label="CollectionsFragment"
+        tools:layout="@layout/fragment_collections" />
 
     <keep_state_fragment
         android:id="@+id/addFragment"
@@ -24,14 +24,15 @@
         tools:layout="@layout/fragment_add" />
 
     <keep_state_fragment
-        android:id="@+id/likesFragment"
-        android:name="app.wallpaper.modules.likes.LikesFragment"
-        android:label="LikesFragment"
-        tools:layout="@layout/fragment_likes" />
+        android:id="@+id/searchFragment"
+        android:name="app.wallpaper.modules.search.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search" />
 
     <keep_state_fragment
         android:id="@+id/moreFragment"
         android:name="app.wallpaper.modules.more.MoreFragment"
         android:label="MoreFragment"
         tools:layout="@layout/fragment_more" />
+
 </navigation>

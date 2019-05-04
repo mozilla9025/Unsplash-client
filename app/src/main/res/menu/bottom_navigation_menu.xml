@@ -8,9 +8,9 @@
         android:title="@null"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/searchFragment"
+        android:id="@+id/collectionsFragment"
         android:enabled="true"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_image"
         android:title="@null"
         app:showAsAction="ifRoom" />
 
@@ -22,9 +22,9 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/likesFragment"
+        android:id="@+id/searchFragment"
         android:enabled="true"
-        android:icon="@drawable/ic_hearth"
+        android:icon="@drawable/ic_search"
         android:title="@null"
         app:showAsAction="ifRoom" />
 

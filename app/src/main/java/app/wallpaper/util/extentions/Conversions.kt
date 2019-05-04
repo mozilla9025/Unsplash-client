@@ -12,6 +12,9 @@ val Float.dp: Int get() = (this * Resources.getSystem().displayMetrics.density +
 // integer to float
 val Int.f: Float get() = toFloat()
 
+// integer to long
+val Int.l: Long get() = toLong()
+
 // integer to double
 val Int.d: Double get() = toDouble()
 

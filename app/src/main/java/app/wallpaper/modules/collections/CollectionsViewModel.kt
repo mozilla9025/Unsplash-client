@@ -1,4 +1,4 @@
-package app.wallpaper.modules.home.collections
+package app.wallpaper.modules.collections
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData

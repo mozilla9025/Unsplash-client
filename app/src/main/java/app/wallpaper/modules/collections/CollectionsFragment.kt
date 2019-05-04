@@ -1,19 +1,21 @@
-package app.wallpaper.modules.home.collections
+package app.wallpaper.modules.collections
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
+import app.wallpaper.data.Collection
 import app.wallpaper.modules.base.BaseFragment
 import app.wallpaper.network.responses.CollectionResponse
 import app.wallpaper.network.responses.ResponseStatus
+import app.wallpaper.util.extentions.dp
+import app.wallpaper.util.recycler.MarginItemDecoration
+import app.wallpaper.widget.LoadingView
 import butterknife.BindView
 import butterknife.ButterKnife
 
@@ -21,6 +23,8 @@ class CollectionsFragment : BaseFragment() {
 
     @BindView(R.id.rv_collections)
     lateinit var rvCollections: RecyclerView
+    @BindView(R.id.loading_collections)
+    lateinit var loadingView: LoadingView
 
     private lateinit var adapter: CollectionsAdapter
 
@@ -38,6 +42,7 @@ class CollectionsFragment : BaseFragment() {
         adapter = CollectionsAdapter(null)
         rvCollections.adapter = adapter
         rvCollections.layoutManager = LinearLayoutManager(context!!)
+        rvCollections.addItemDecoration(MarginItemDecoration(4.dp, 0.dp))
 
         observeData()
         viewModel.getCollections()
@@ -50,9 +55,26 @@ class CollectionsFragment : BaseFragment() {
 
     private fun handleResponse(response: CollectionResponse?) {
         when (response?.status) {
-            ResponseStatus.SUCCESS -> adapter.updateData(response.data)
-            ResponseStatus.LOADING -> Log.i("Collections", "loading")
-            ResponseStatus.FAILURE -> Toast.makeText(context!!, response.error?.message, Toast.LENGTH_SHORT).show()
+            ResponseStatus.SUCCESS -> onSuccess(response.data!!)
+            ResponseStatus.LOADING -> onLoading()
+            ResponseStatus.FAILURE -> onFailure(response.error?.message!!)
         }
     }
+
+    private fun onSuccess(data: List<Collection>) {
+        loadingView.onSuccess()
+        adapter.updateData(data)
+        rvCollections.visibility = View.VISIBLE
+    }
+
+    private fun onLoading() {
+        loadingView.onLoading()
+        rvCollections.visibility = View.GONE
+    }
+
+    private fun onFailure(error: String) {
+        loadingView.onError(error)
+        rvCollections.visibility = View.GONE
+    }
+
 }
