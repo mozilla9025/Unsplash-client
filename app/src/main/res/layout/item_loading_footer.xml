@@ -2,20 +2,23 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dp8"
+    android:paddingBottom="@dimen/dp8">
 
     <app.wallpaper.widget.progress.ProgressCircle
         android:id="@+id/progress_view"
-        android:layout_width="@dimen/dp42"
-        android:layout_height="@dimen/dp42"
+        android:layout_width="@dimen/dp32"
+        android:layout_height="@dimen/dp32"
         android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:pgc_indeterminate="true"
-        app:pgc_speed="1"
         app:pgc_rimColor="@color/blue"
-        app:pgc_rimWidth="@dimen/dp4" />
+        app:pgc_rimWidth="@dimen/dp2"
+        app:pgc_speed="1" />
 
     <TextView
         android:id="@+id/tv_error"
@@ -26,6 +29,7 @@
         android:fontFamily="@font/droid_sans"
         android:gravity="center"
         android:textColor="@color/black"
+        android:textSize="@dimen/sp12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

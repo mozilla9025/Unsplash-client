@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
-import app.wallpaper.data.Photo
 import app.wallpaper.modules.base.BaseFragment
-import app.wallpaper.network.responses.PhotoResponse
+import app.wallpaper.network.Retryable
+import app.wallpaper.network.responses.PagingResponse
 import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.recycler.MarginItemDecoration
@@ -39,42 +39,51 @@ class HomeFragment : BaseFragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         unbinder = ButterKnife.bind(this, view)
 
-        adapter = PhotoAdapter(null)
+        adapter = PhotoAdapter(object : Retryable {
+            override fun retry() {
+                viewModel.retry()
+            }
+        })
+
         rvPhotos.adapter = adapter
         rvPhotos.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         rvPhotos.addItemDecoration(MarginItemDecoration(4.dp, 0.dp))
-
         observeData()
 
-        viewModel.getPhotos()
         return view
     }
 
     private fun observeData() {
-        viewModel.photosLiveData.observe(viewLifecycleOwner, Observer<PhotoResponse> { res -> handlePhotoLoaded(res) })
+        viewModel.getInitialLoadState().observe(viewLifecycleOwner, Observer { handleInitialLoad(it) })
+        viewModel.getRangeLoadState().observe(viewLifecycleOwner, Observer { handleRangeLoad(it) })
+        viewModel.data.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
+        })
     }
 
-    private fun handlePhotoLoaded(response: PhotoResponse) {
+    private fun handleRangeLoad(response: PagingResponse) {
+        adapter.updateResponse(response.status)
+    }
+
+    private fun handleInitialLoad(response: PagingResponse) {
         when (response.status) {
-            ResponseStatus.SUCCESS -> onSuccess(response.data!!)
-            ResponseStatus.FAILURE -> response.error?.message?.let { onFailure(it) }
-            ResponseStatus.LOADING -> onLoading()
+            ResponseStatus.SUCCESS -> {
+                loadingView.onSuccess()
+                rvPhotos.visibility = View.VISIBLE
+            }
+            ResponseStatus.FAILURE -> {
+                rvPhotos.visibility = View.GONE
+                loadingView.onError(response.error?.message
+                        ?: getString(R.string.Api_Call_Default_Error_Message), object : LoadingView.OnRetryClickListener {
+                    override fun onRetryClicked() {
+                        viewModel.retry()
+                    }
+                })
+            }
+            ResponseStatus.LOADING -> {
+                rvPhotos.visibility = View.GONE
+                loadingView.onLoading()
+            }
         }
-    }
-
-    private fun onSuccess(data: List<Photo>) {
-        loadingView.onSuccess()
-        adapter.updateData(data)
-        rvPhotos.visibility = View.VISIBLE
-    }
-
-    private fun onLoading() {
-        loadingView.onLoading()
-        rvPhotos.visibility = View.GONE
-    }
-
-    private fun onFailure(error: String) {
-        loadingView.onError(error)
-        rvPhotos.visibility = View.GONE
     }
 }

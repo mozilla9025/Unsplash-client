@@ -1,39 +1,44 @@
 package app.wallpaper.modules.home
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
-import app.wallpaper.app.ApplicationLoader
-import app.wallpaper.data.Order
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import app.wallpaper.data.Photo
 import app.wallpaper.modules.base.BaseViewModel
-import app.wallpaper.network.controllers.PhotosApiController
-import app.wallpaper.network.responses.PhotoResponse
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
+import app.wallpaper.network.Refreshable
+import app.wallpaper.network.responses.PagingResponse
 
-class HomeViewModel(application: Application) : BaseViewModel(application) {
 
-    @Inject
-    lateinit var photosApiController: PhotosApiController
+class HomeViewModel(application: Application) : BaseViewModel(application), Refreshable {
 
-    val photosLiveData: MutableLiveData<PhotoResponse> by lazy {
-        MutableLiveData<PhotoResponse>()
-    }
+    var data: LiveData<PagedList<Photo>>
+    private var dataSourceFactory: PhotoDataSourceFactory
 
     init {
-        ApplicationLoader.applicationComponent.inject(this)
+        val config = PagedList.Config.Builder()
+                .setPageSize(10)
+                .setPrefetchDistance(10)
+                .setInitialLoadSizeHint(10)
+                .setEnablePlaceholders(false)
+                .build()
+
+        dataSourceFactory = PhotoDataSourceFactory(disposables)
+        data = LivePagedListBuilder<Int, Photo>(dataSourceFactory, config).build()
     }
 
-    fun getPhotos() {
-        disposables.add(
-                photosApiController.getPhotos(0, 30, Order.LATEST)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe { photosLiveData.setValue(PhotoResponse.instance.loading()) }
-                        .subscribe({ response ->
-                            photosLiveData.setValue(PhotoResponse.instance.success(response))
-                        },
-                                { error -> photosLiveData.setValue(PhotoResponse.instance.failure(error)) })
-        )
+    fun getInitialLoadState(): LiveData<PagingResponse> =
+            Transformations.switchMap<PhotoDataSource, PagingResponse>(dataSourceFactory.dataSourceLiveData, PhotoDataSource::initialLoad)
+
+    fun getRangeLoadState(): LiveData<PagingResponse> =
+            Transformations.switchMap<PhotoDataSource, PagingResponse>(dataSourceFactory.dataSourceLiveData, PhotoDataSource::rangeLoad)
+
+    override fun retry() {
+        dataSourceFactory.dataSourceLiveData.value?.retry()
+    }
+
+    override fun refresh() {
+        dataSourceFactory.dataSourceLiveData.value?.refresh()
     }
 }

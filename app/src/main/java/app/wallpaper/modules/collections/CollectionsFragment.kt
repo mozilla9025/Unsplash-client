@@ -57,7 +57,11 @@ class CollectionsFragment : BaseFragment() {
         when (response?.status) {
             ResponseStatus.SUCCESS -> onSuccess(response.data!!)
             ResponseStatus.LOADING -> onLoading()
-            ResponseStatus.FAILURE -> onFailure(response.error?.message!!)
+            ResponseStatus.FAILURE -> onFailure(response.error?.message!!, object : LoadingView.OnRetryClickListener {
+                override fun onRetryClicked() {
+                    viewModel.getCollections()
+                }
+            })
         }
     }
 
@@ -72,8 +76,9 @@ class CollectionsFragment : BaseFragment() {
         rvCollections.visibility = View.GONE
     }
 
-    private fun onFailure(error: String) {
-        loadingView.onError(error)
+    private fun onFailure(error: String?, retryCallback: LoadingView.OnRetryClickListener?) {
+        loadingView.onError(error
+                ?: getString(R.string.Api_Call_Default_Error_Message), retryCallback)
         rvCollections.visibility = View.GONE
     }
 

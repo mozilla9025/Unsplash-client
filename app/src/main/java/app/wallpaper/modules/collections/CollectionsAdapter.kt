@@ -54,16 +54,11 @@ class CollectionsAdapter(private var data: List<Collection>?) : RecyclerView.Ada
         notifyDataSetChanged()
     }
 
-    inner class CollectionViewHolder(itemView: View, viewType: Int) : BaseViewHolder<Collection>(itemView) {
-
-        var type: Int? = null
-
-        init {
-            this.type = viewType
-        }
+    inner class CollectionViewHolder(itemView: View, private var viewType: Int) : BaseViewHolder<Collection>(itemView) {
 
         override fun bind(item: Collection) {
-            when (type) {
+
+            when (viewType) {
                 SINGLE_IMAGE -> bindSingleImage(item)
                 MULTIPLE_IMAGES -> bindMultipleImages(item)
             }

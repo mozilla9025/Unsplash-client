@@ -1,3 +1,3 @@
 <resources>
-<string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string><string name="CollectionsAdapter_Count_and_Author_format">%s photos by %s</string>
+<string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string><string name="CollectionsAdapter_Count_and_Author_format">%s photos by %s</string><string name="Api_Call_Default_Error_Message">Something went wrong. Please check your internet connection and try again later</string><string name="LoadingView_Btn_Retry_text">retry</string>
 </resources>

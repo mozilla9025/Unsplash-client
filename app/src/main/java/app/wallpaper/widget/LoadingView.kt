@@ -17,20 +17,31 @@ class LoadingView @JvmOverloads constructor(context: Context,
                 .inflate(R.layout.view_loading, this, true)
     }
 
-    fun onError(error: String) {
+    fun onError(error: String, retryClickListener: OnRetryClickListener?) {
+        tv_error.text = error
         progress_view.visibility = View.GONE
         tv_error.visibility = View.VISIBLE
-        tv_error.text = error
+        if (retryClickListener != null) {
+            btn_retry.visibility = View.VISIBLE
+            btn_retry.setOnClickListener { retryClickListener.onRetryClicked() }
+        } else {
+            btn_retry.visibility = View.GONE
+        }
         visibility = View.VISIBLE
     }
 
     fun onLoading() {
         tv_error.visibility = View.GONE
+        btn_retry.visibility = View.GONE
         progress_view.visibility = View.VISIBLE
         visibility = View.VISIBLE
     }
 
     fun onSuccess() {
         visibility = View.GONE
+    }
+
+    interface OnRetryClickListener {
+        fun onRetryClicked()
     }
 }
