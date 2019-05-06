@@ -3,9 +3,11 @@ package app.wallpaper.di
 import app.wallpaper.network.api.CollectionApi
 import app.wallpaper.network.api.CurrentUserApi
 import app.wallpaper.network.api.PhotosApi
+import app.wallpaper.network.api.UserApi
 import app.wallpaper.network.controllers.CollectionApiController
 import app.wallpaper.network.controllers.CurrentUserApiController
 import app.wallpaper.network.controllers.PhotosApiController
+import app.wallpaper.network.controllers.UserApiController
 import dagger.Module
 import dagger.Provides
 
@@ -25,5 +27,10 @@ open class ApiControllerModule {
     @Provides
     fun provideCollectionApiController(api: CollectionApi): CollectionApiController {
         return CollectionApiController(api)
+    }
+
+    @Provides
+    fun provideUserApiController(api: UserApi): UserApiController {
+        return UserApiController(api)
     }
 }

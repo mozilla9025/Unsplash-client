@@ -7,47 +7,26 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="@dimen/dp2">
-    <com.google.android.material.appbar.CollapsingToolbarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_scrollFlags="scroll|enterAlways">
-        <Toolbar
-            android:id="@+id/toolbar_home"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbarHeight"
-            android:background="@color/lightGray"
-            android:contentInsetStart="@dimen/dp16"
-            android:contentInsetEnd="@dimen/dp16">
+        app:elevation="@dimen/dp0">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+             <androidx.constraintlayout.widget.ConstraintLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:background="@color/lightGray"
+                 android:paddingTop="@dimen/dp8"
+                 android:paddingBottom="@dimen/dp8"
+                 app:layout_scrollFlags="scroll|enterAlways">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/open_sans"
-                android:includeFontPadding="false"
-                android:text="Photos"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                 <androidx.recyclerview.widget.RecyclerView
+                     android:id="@+id/rv_unsplash_collections"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:orientation="horizontal"
+                     app:layout_constraintEnd_toEndOf="parent"
+                     app:layout_constraintStart_toStartOf="parent"
+                     app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
-                android:id="@+id/btn_filter"
-                android:layout_width="@dimen/dp32"
-                android:layout_height="@dimen/dp32"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_filter"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </Toolbar>
-    </com.google.android.material.appbar.CollapsingToolbarLayout>
+             </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

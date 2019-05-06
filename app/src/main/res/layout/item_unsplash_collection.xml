@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_unsplash_collection"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_unsplash_collection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/droid_sans"
+        android:lines="1"
+        android:maxLines="1"
+        android:padding="@dimen/dp8"
+        android:text="Wallpapers"
+        android:textColor="@color/darkPurple" />
+</LinearLayout>

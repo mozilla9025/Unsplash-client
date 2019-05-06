@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
 import app.wallpaper.modules.base.BaseFragment
 import app.wallpaper.network.Retryable
+import app.wallpaper.network.responses.CollectionResponse
 import app.wallpaper.network.responses.PagingResponse
 import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.extentions.dp
@@ -23,10 +24,13 @@ class HomeFragment : BaseFragment() {
 
     @BindView(R.id.rv_photos)
     lateinit var rvPhotos: RecyclerView
+    @BindView(R.id.rv_unsplash_collections)
+    lateinit var rvCollections: RecyclerView
     @BindView(R.id.loading_home)
     lateinit var loadingView: LoadingView
 
-    private lateinit var adapter: PhotoAdapter
+    private lateinit var photoAdapter: PhotoAdapter
+    private lateinit var collectionAdapter: UnsplashCollectionAdapter
 
     private val viewModel: HomeViewModel by lazy {
         ViewModelProviders.of(this).get(HomeViewModel::class.java)
@@ -39,30 +43,38 @@ class HomeFragment : BaseFragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         unbinder = ButterKnife.bind(this, view)
 
-        adapter = PhotoAdapter(object : Retryable {
+        photoAdapter = PhotoAdapter(object : Retryable {
             override fun retry() {
                 viewModel.retry()
             }
         })
 
-        rvPhotos.adapter = adapter
+        rvPhotos.adapter = photoAdapter
         rvPhotos.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
-        rvPhotos.addItemDecoration(MarginItemDecoration(4.dp, 0.dp))
+        rvPhotos.addItemDecoration(MarginItemDecoration(4.dp, 0.dp, RecyclerView.VERTICAL))
+
+        collectionAdapter = UnsplashCollectionAdapter()
+        rvCollections.adapter = collectionAdapter
+        rvCollections.layoutManager = LinearLayoutManager(context!!, RecyclerView.HORIZONTAL, false)
+        rvCollections.addItemDecoration(MarginItemDecoration(0.dp, 4.dp, RecyclerView.HORIZONTAL))
+
         observeData()
 
+        viewModel.getUnsplashCollections()
         return view
     }
 
     private fun observeData() {
+        viewModel.collectionsLiveData.observe(viewLifecycleOwner, Observer { handleCollectionsLoad(it) })
         viewModel.getInitialLoadState().observe(viewLifecycleOwner, Observer { handleInitialLoad(it) })
         viewModel.getRangeLoadState().observe(viewLifecycleOwner, Observer { handleRangeLoad(it) })
         viewModel.data.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
+            photoAdapter.submitList(it)
         })
     }
 
     private fun handleRangeLoad(response: PagingResponse) {
-        adapter.updateResponse(response.status)
+        photoAdapter.updateResponse(response.status)
     }
 
     private fun handleInitialLoad(response: PagingResponse) {
@@ -83,6 +95,21 @@ class HomeFragment : BaseFragment() {
             ResponseStatus.LOADING -> {
                 rvPhotos.visibility = View.GONE
                 loadingView.onLoading()
+            }
+        }
+    }
+
+    private fun handleCollectionsLoad(response: CollectionResponse) {
+        when (response.status) {
+            ResponseStatus.SUCCESS -> {
+                collectionAdapter.updateData(response.data)
+                rvCollections.visibility = View.VISIBLE
+            }
+            ResponseStatus.FAILURE -> {
+                rvCollections.visibility = View.GONE
+            }
+            ResponseStatus.LOADING -> {
+                rvCollections.visibility = View.GONE
             }
         }
     }

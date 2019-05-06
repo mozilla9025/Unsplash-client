@@ -46,7 +46,7 @@ class CollectionsFragment : BaseFragment() {
         })
         rvCollections.adapter = adapter
         rvCollections.layoutManager = LinearLayoutManager(context!!)
-        rvCollections.addItemDecoration(MarginItemDecoration(4.dp, 0.dp))
+        rvCollections.addItemDecoration(MarginItemDecoration(4.dp, 0.dp, RecyclerView.VERTICAL))
 
         observeData()
         return view
