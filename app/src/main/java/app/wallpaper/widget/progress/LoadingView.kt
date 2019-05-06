@@ -1,4 +1,4 @@
-package app.wallpaper.widget
+package app.wallpaper.widget.progress
 
 import android.content.Context
 import android.util.AttributeSet

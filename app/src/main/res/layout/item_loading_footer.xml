@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:pgc_indeterminate="true"
         app:pgc_rimColor="@color/blue"
-        app:pgc_rimWidth="@dimen/dp2"
+        app:pgc_rimWidth="@dimen/dp4"
         app:pgc_speed="1" />
 
     <TextView

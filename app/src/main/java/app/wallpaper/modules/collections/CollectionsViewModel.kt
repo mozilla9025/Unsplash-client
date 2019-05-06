@@ -1,38 +1,45 @@
 package app.wallpaper.modules.collections
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
-import app.wallpaper.app.ApplicationLoader
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import app.wallpaper.data.Collection
 import app.wallpaper.modules.base.BaseViewModel
-import app.wallpaper.network.controllers.CollectionApiController
-import app.wallpaper.network.responses.CollectionResponse
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
+import app.wallpaper.modules.home.CollectionDataSource
+import app.wallpaper.modules.home.CollectionDataSourceFactory
+import app.wallpaper.network.Refreshable
+import app.wallpaper.network.responses.PagingResponse
 
-class CollectionsViewModel(application: Application) : BaseViewModel(application) {
+class CollectionsViewModel(application: Application) : BaseViewModel(application), Refreshable {
 
-    @Inject
-    lateinit var collectionApiController: CollectionApiController
+    internal var data: LiveData<PagedList<Collection>>
+    private var dataSourceFactory: CollectionDataSourceFactory
 
     init {
-        ApplicationLoader.applicationComponent.inject(this)
+        val config = PagedList.Config.Builder()
+                .setPageSize(10)
+                .setPrefetchDistance(10)
+                .setInitialLoadSizeHint(10)
+                .setEnablePlaceholders(false)
+                .build()
+
+        dataSourceFactory = CollectionDataSourceFactory(disposables)
+        data = LivePagedListBuilder<Int, Collection>(dataSourceFactory, config).build()
     }
 
-    val photosLiveData: MutableLiveData<CollectionResponse> by lazy {
-        MutableLiveData<CollectionResponse>()
+    internal fun getInitialLoadState(): LiveData<PagingResponse> =
+            Transformations.switchMap<CollectionDataSource, PagingResponse>(dataSourceFactory.dataSourceLiveData, CollectionDataSource::initialLoad)
+
+    internal fun getRangeLoadState(): LiveData<PagingResponse> =
+            Transformations.switchMap<CollectionDataSource, PagingResponse>(dataSourceFactory.dataSourceLiveData, CollectionDataSource::rangeLoad)
+
+    override fun retry() {
+        dataSourceFactory.dataSourceLiveData.value?.retry()
     }
 
-    fun getCollections() {
-        disposables.add(collectionApiController.getCollections(0, 30)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { photosLiveData.value = CollectionResponse.instance.loading() }
-                .subscribe({ result -> photosLiveData.value = CollectionResponse.instance.success(result) },
-                        { error ->
-                            photosLiveData.value = CollectionResponse.instance.failure(error)
-                        }
-                ))
+    override fun refresh() {
+        dataSourceFactory.dataSourceLiveData.value?.refresh()
     }
 }

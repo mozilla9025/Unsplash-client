@@ -1,7 +1,7 @@
 package app.wallpaper.di
 
 import app.wallpaper.modules.collections.CollectionsViewModel
-import app.wallpaper.modules.home.HomeViewModel
+import app.wallpaper.modules.home.CollectionDataSource
 import app.wallpaper.modules.home.PhotoDataSource
 import app.wallpaper.modules.main.MainViewModel
 import dagger.Component
@@ -14,5 +14,6 @@ interface ApplicationComponent {
     fun inject(viewModel: CollectionsViewModel)
 
 
+    fun inject(dataSource: CollectionDataSource)
     fun inject(dataSource: PhotoDataSource)
 }

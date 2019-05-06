@@ -19,7 +19,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.item_photo.view.*
 
 
-class PhotoAdapter(private var retryCallback: Retryable) : PagedListAdapter<Photo, RecyclerView.ViewHolder>(diffCallback) {
+class PhotoAdapter(private var retryCallback: Retryable) : PagedListAdapter<Photo, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     private var response: ResponseStatus = ResponseStatus.SUCCESS
 
@@ -67,7 +67,7 @@ class PhotoAdapter(private var retryCallback: Retryable) : PagedListAdapter<Phot
     }
 
     companion object {
-        private val diffCallback = object : DiffUtil.ItemCallback<Photo>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Photo>() {
             override fun areItemsTheSame(oldItem: Photo, newItem: Photo): Boolean {
                 return oldItem.id == newItem.id
             }

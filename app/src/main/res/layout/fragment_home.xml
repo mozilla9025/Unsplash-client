@@ -58,7 +58,7 @@
         android:overScrollMode="never"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <app.wallpaper.widget.LoadingView
+    <app.wallpaper.widget.progress.LoadingView
         android:id="@+id/loading_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

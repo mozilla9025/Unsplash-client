@@ -3,55 +3,98 @@ package app.wallpaper.modules.collections
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
 import app.wallpaper.app.GlideApp
 import app.wallpaper.data.Collection
 import app.wallpaper.modules.base.BaseViewHolder
+import app.wallpaper.network.Retryable
+import app.wallpaper.network.responses.ResponseStatus
+import app.wallpaper.util.recycler.PagingFooterViewHolder
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.include_collection_name.view.*
 import kotlinx.android.synthetic.main.item_collection.view.*
 import kotlinx.android.synthetic.main.item_collection_album.view.*
 
-class CollectionsAdapter(private var data: List<Collection>?) : RecyclerView.Adapter<CollectionsAdapter.CollectionViewHolder>() {
+class CollectionsAdapter(private var retryCallback: Retryable) : PagedListAdapter<Collection, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
+
+    private var response: ResponseStatus = ResponseStatus.SUCCESS
 
     companion object {
-        private const val SINGLE_IMAGE: Int = 0
-        private const val MULTIPLE_IMAGES: Int = 1
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Collection>() {
+            override fun areItemsTheSame(oldItem: Collection, newItem: Collection): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Collection, newItem: Collection): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
+
+        private const val SINGLE_IMAGE = 0
+        private const val MULTIPLE_IMAGES = 1
+        private const val LOADING_FOOTER = 2
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionViewHolder {
-        val layout = when (viewType) {
-            MULTIPLE_IMAGES -> R.layout.item_collection_album
-            else -> R.layout.item_collection
+    internal fun updateResponse(response: ResponseStatus) {
+        if (currentList != null) {
+            if (currentList!!.size > 0) {
+                val previousState = this.response
+                val hadFooter = hasFooter()
+                this.response = response
+                val hasExtraRow = hasFooter()
+                if (hadFooter != hasExtraRow) {
+                    if (hadFooter) {
+                        notifyItemRemoved(super.getItemCount())
+                    } else {
+                        notifyItemInserted(super.getItemCount())
+                    }
+                } else if (hasExtraRow && previousState != response) {
+                    notifyItemChanged(itemCount - 1)
+                }
+            }
         }
-        return CollectionViewHolder(LayoutInflater.from(parent.context)
-                .inflate(layout, parent, false), viewType)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            MULTIPLE_IMAGES -> CollectionViewHolder(LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_collection_album, parent, false), viewType)
+            SINGLE_IMAGE -> CollectionViewHolder(LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_collection, parent, false), viewType)
+            LOADING_FOOTER -> PagingFooterViewHolder.create(parent, retryCallback)
+            else -> throw IllegalStateException("No matching view holder for type $viewType")
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (getItemViewType(holder.adapterPosition)) {
+            SINGLE_IMAGE -> getItem(holder.adapterPosition)?.let {
+                (holder as CollectionViewHolder).bind(it)
+            }
+            MULTIPLE_IMAGES -> getItem(holder.adapterPosition)?.let {
+                (holder as CollectionViewHolder).bind(it)
+            }
+            LOADING_FOOTER -> (holder as PagingFooterViewHolder).bind(response)
+        }
     }
 
     override fun getItemCount(): Int {
-        return data?.size ?: 0
+        return super.getItemCount() + if (hasFooter()) 1 else 0
     }
 
-    override fun onBindViewHolder(holder: CollectionViewHolder, position: Int) {
-        data?.get(holder.adapterPosition)?.let { collection ->
-            holder.bind(collection)
-        }
-    }
+    private fun hasFooter(): Boolean = response != ResponseStatus.SUCCESS
 
     override fun getItemViewType(position: Int): Int {
-        data?.get(position)?.let { item ->
-            return if (item.previews.count() < 3)
+        return if (hasFooter() && position == itemCount - 1) LOADING_FOOTER
+        else getItem(position).let { item ->
+            if (item!!.previews.count() < 3)
                 SINGLE_IMAGE
             else
                 MULTIPLE_IMAGES
         }
-        return SINGLE_IMAGE
-    }
-
-    fun updateData(data: List<Collection>?) {
-        this.data = data
-        notifyDataSetChanged()
     }
 
     inner class CollectionViewHolder(itemView: View, private var viewType: Int) : BaseViewHolder<Collection>(itemView) {

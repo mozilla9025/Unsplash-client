@@ -15,7 +15,7 @@ import app.wallpaper.network.responses.PagingResponse
 import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.recycler.MarginItemDecoration
-import app.wallpaper.widget.LoadingView
+import app.wallpaper.widget.progress.LoadingView
 import butterknife.BindView
 import butterknife.ButterKnife
 
