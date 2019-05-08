@@ -34,24 +34,16 @@ class PhotoDataSource(private val disposable: CompositeDisposable?) : PageKeyedD
     }
 
     fun retry() {
-        if (retryCompletable != null) {
-            disposable?.add(retryCompletable!!
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { })
-        }
+        if (retryCompletable == null) return
+
+        disposable?.add(retryCompletable!!
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { })
     }
 
     fun refresh() {
         invalidate()
-    }
-
-    private fun setRetry(action: Action?) {
-        if (action == null) {
-            this.retryCompletable = null
-        } else {
-            this.retryCompletable = Completable.fromAction(action)
-        }
     }
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Photo>) {
@@ -59,8 +51,8 @@ class PhotoDataSource(private val disposable: CompositeDisposable?) : PageKeyedD
         disposable?.add(photosApiController.getPhotos(currPage, params.requestedLoadSize, Order.LATEST)
                 .doOnSubscribe { initialLoad.postValue(PagingResponse.loading()) }
                 .subscribe({ response ->
-                    callback.onResult(response, null, currPage + 1)
                     initialLoad.postValue(PagingResponse.success())
+                    callback.onResult(response, null, currPage + 1)
                 }, { error ->
                     initialLoad.postValue(PagingResponse.failure(error))
                     setRetry(Action { loadInitial(params, callback) })
@@ -80,5 +72,13 @@ class PhotoDataSource(private val disposable: CompositeDisposable?) : PageKeyedD
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Photo>) {
+    }
+
+    private fun setRetry(action: Action?) {
+        if (action == null) {
+            this.retryCompletable = null
+        } else {
+            this.retryCompletable = Completable.fromAction(action)
+        }
     }
 }

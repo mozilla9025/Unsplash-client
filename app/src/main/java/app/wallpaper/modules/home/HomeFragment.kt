@@ -17,6 +17,7 @@ import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.recycler.MarginItemDecoration
 import app.wallpaper.widget.progress.LoadingView
+import app.wallpaper.widget.progress.swiperefresh.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 
@@ -28,6 +29,8 @@ class HomeFragment : BaseFragment() {
     lateinit var rvCollections: RecyclerView
     @BindView(R.id.loading_home)
     lateinit var loadingView: LoadingView
+    @BindView(R.id.srl_home)
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private lateinit var photoAdapter: PhotoAdapter
     private lateinit var collectionAdapter: UnsplashCollectionAdapter
@@ -49,6 +52,7 @@ class HomeFragment : BaseFragment() {
             }
         })
 
+        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
         rvPhotos.adapter = photoAdapter
         rvPhotos.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         rvPhotos.addItemDecoration(MarginItemDecoration(4.dp, 0.dp, RecyclerView.VERTICAL))
@@ -80,10 +84,12 @@ class HomeFragment : BaseFragment() {
     private fun handleInitialLoad(response: PagingResponse) {
         when (response.status) {
             ResponseStatus.SUCCESS -> {
+                if (swipeRefreshLayout.isRefreshing) swipeRefreshLayout.isRefreshing = false
                 loadingView.onSuccess()
                 rvPhotos.visibility = View.VISIBLE
             }
             ResponseStatus.FAILURE -> {
+                if (swipeRefreshLayout.isRefreshing) swipeRefreshLayout.isRefreshing = false
                 rvPhotos.visibility = View.GONE
                 loadingView.onError(response.error?.message
                         ?: getString(R.string.Api_Call_Default_Error_Message), object : LoadingView.OnRetryClickListener {
@@ -93,8 +99,10 @@ class HomeFragment : BaseFragment() {
                 })
             }
             ResponseStatus.LOADING -> {
-                rvPhotos.visibility = View.GONE
-                loadingView.onLoading()
+                if (photoAdapter.currentList == null || photoAdapter.currentList!!.isEmpty()) {
+                    rvPhotos.visibility = View.GONE
+                    loadingView.onLoading()
+                }
             }
         }
     }

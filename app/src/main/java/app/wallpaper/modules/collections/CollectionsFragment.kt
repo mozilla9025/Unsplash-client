@@ -16,6 +16,7 @@ import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.recycler.MarginItemDecoration
 import app.wallpaper.widget.progress.LoadingView
+import app.wallpaper.widget.progress.swiperefresh.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 
@@ -25,6 +26,8 @@ class CollectionsFragment : BaseFragment() {
     lateinit var rvCollections: RecyclerView
     @BindView(R.id.loading_collections)
     lateinit var loadingView: LoadingView
+    @BindView(R.id.srl_collections)
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private lateinit var adapter: CollectionsAdapter
 
@@ -38,6 +41,8 @@ class CollectionsFragment : BaseFragment() {
 
         val view = inflater.inflate(R.layout.fragment_collections, container, false)
         unbinder = ButterKnife.bind(this, view)
+
+        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
 
         adapter = CollectionsAdapter(object : Retryable {
             override fun retry() {
@@ -67,10 +72,16 @@ class CollectionsFragment : BaseFragment() {
     private fun handleInitialLoad(response: PagingResponse) {
         when (response.status) {
             ResponseStatus.SUCCESS -> {
+                if (swipeRefreshLayout.isRefreshing)
+                    swipeRefreshLayout.isRefreshing = false
+
                 loadingView.onSuccess()
                 rvCollections.visibility = View.VISIBLE
             }
             ResponseStatus.FAILURE -> {
+                if (swipeRefreshLayout.isRefreshing)
+                    swipeRefreshLayout.isRefreshing = false
+
                 rvCollections.visibility = View.GONE
                 loadingView.onError(response.error?.message
                         ?: getString(R.string.Api_Call_Default_Error_Message),
@@ -81,8 +92,10 @@ class CollectionsFragment : BaseFragment() {
                         })
             }
             ResponseStatus.LOADING -> {
-                rvCollections.visibility = View.GONE
-                loadingView.onLoading()
+                if (adapter.currentList == null || adapter.currentList!!.isEmpty()) {
+                    rvCollections.visibility = View.GONE
+                    loadingView.onLoading()
+                }
             }
         }
     }
