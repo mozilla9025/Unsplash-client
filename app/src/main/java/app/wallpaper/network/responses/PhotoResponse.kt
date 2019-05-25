@@ -1,6 +1,6 @@
 package app.wallpaper.network.responses
 
-import app.wallpaper.data.Photo
+import app.wallpaper.domain.data.Photo
 
 class PhotoResponse(var status: ResponseStatus) {
 

@@ -1,4 +1,4 @@
-package app.wallpaper.di
+package app.wallpaper.network
 
 import okhttp3.Interceptor
 import okhttp3.Response

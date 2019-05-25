@@ -1,4 +1,4 @@
-package app.wallpaper.data
+package app.wallpaper.domain.data
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,4 +1,4 @@
-package app.wallpaper.data
+package app.wallpaper.domain.data
 
 enum class Orientation(value: String) {
 

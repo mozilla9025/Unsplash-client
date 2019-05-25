@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
 import app.wallpaper.app.GlideApp
-import app.wallpaper.data.Photo
+import app.wallpaper.domain.data.Photo
 import app.wallpaper.modules.base.BaseViewHolder
 import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.ResponseStatus

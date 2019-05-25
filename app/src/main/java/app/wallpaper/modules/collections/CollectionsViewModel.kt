@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import app.wallpaper.data.Collection
+import app.wallpaper.domain.data.Collection
 import app.wallpaper.modules.base.BaseViewModel
 import app.wallpaper.modules.home.CollectionDataSource
 import app.wallpaper.modules.home.CollectionDataSourceFactory

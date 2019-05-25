@@ -1,7 +1,7 @@
 package app.wallpaper.network.api
 
-import app.wallpaper.data.Collection
-import app.wallpaper.data.Photo
+import app.wallpaper.domain.data.Collection
+import app.wallpaper.domain.data.Photo
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path

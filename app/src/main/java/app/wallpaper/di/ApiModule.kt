@@ -6,7 +6,7 @@ import dagger.Provides
 import retrofit2.Retrofit
 
 @Module
-open class ApiModule {
+class ApiModule {
 
     @Provides
     fun providePhotosApi(retrofit: Retrofit): PhotosApi {

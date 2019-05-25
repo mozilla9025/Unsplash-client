@@ -90,13 +90,13 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="collectionsFragment2">
+                  <entry key="collectionsFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="241" />
-                            <option name="y" value="2" />
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -114,18 +114,6 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="likesFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="368" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="moreFragment">
                     <value>
                       <LayoutPositions>
@@ -133,6 +121,18 @@
                           <Point>
                             <option name="x" value="256" />
                             <option name="y" value="368" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="searchFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="256" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>

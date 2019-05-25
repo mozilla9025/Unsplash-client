@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
-import app.wallpaper.data.Collection
+import app.wallpaper.domain.data.Collection
 import app.wallpaper.modules.base.BaseViewHolder
 import kotlinx.android.synthetic.main.item_unsplash_collection.view.*
 

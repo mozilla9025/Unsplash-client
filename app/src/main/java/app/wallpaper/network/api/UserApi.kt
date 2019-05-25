@@ -1,9 +1,10 @@
 package app.wallpaper.network.api
 
-import app.wallpaper.data.Collection
-import app.wallpaper.data.Photo
-import app.wallpaper.data.User
+import app.wallpaper.domain.data.Collection
+import app.wallpaper.domain.data.Photo
+import app.wallpaper.domain.data.User
 import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.GET
@@ -13,13 +14,13 @@ import retrofit2.http.Query
 interface UserApi {
 
     @GET("/users/{username}")
-    fun getUser(@Path("username") userName: String): Observable<User>
+    fun getUser(@Path("username") userName: String): Single<User>
 
     @GET("/users/{username}/portfolio")
-    fun getPortfolio(@Path("username") userName: String): Observable<Response<ResponseBody>>
+    fun getPortfolio(@Path("username") userName: String): Single<Response<ResponseBody>>
 
     @GET("/users/{username}/photos")
-    fun getPhotos(@Path("username") userName: String): Observable<List<Photo>>
+    fun getPhotos(@Path("username") userName: String): Single<List<Photo>>
 
     @GET("/users/{username}/likes")
     fun getLikes(

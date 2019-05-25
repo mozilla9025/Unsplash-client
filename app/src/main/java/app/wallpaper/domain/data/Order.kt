@@ -1,4 +1,4 @@
-package app.wallpaper.data
+package app.wallpaper.domain.data
 
 enum class Order(val value: String) {
     LATEST("latest"),

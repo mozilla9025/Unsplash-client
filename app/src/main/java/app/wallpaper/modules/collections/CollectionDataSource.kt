@@ -3,7 +3,7 @@ package app.wallpaper.modules.home
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import app.wallpaper.app.ApplicationLoader
-import app.wallpaper.data.Collection
+import app.wallpaper.domain.data.Collection
 import app.wallpaper.network.controllers.CollectionApiController
 import app.wallpaper.network.responses.PagingResponse
 import io.reactivex.Completable

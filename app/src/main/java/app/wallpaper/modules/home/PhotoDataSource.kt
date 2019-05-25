@@ -3,8 +3,8 @@ package app.wallpaper.modules.home
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import app.wallpaper.app.ApplicationLoader
-import app.wallpaper.data.Order
-import app.wallpaper.data.Photo
+import app.wallpaper.domain.data.Order
+import app.wallpaper.domain.data.Photo
 import app.wallpaper.network.controllers.PhotosApiController
 import app.wallpaper.network.responses.PagingResponse
 import io.reactivex.Completable

@@ -3,6 +3,7 @@ package app.wallpaper.di
 import android.app.Application
 import app.wallpaper.BuildConfig
 import app.wallpaper.app.Constants
+import app.wallpaper.network.HeaderInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -14,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Module
-open class NetworkModule {
+class NetworkModule {
 
     @Provides
     fun provideHttpCache(application: Application): Cache {

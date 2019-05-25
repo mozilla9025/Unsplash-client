@@ -7,7 +7,7 @@ import androidx.lifecycle.Transformations
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import app.wallpaper.app.ApplicationLoader
-import app.wallpaper.data.Photo
+import app.wallpaper.domain.data.Photo
 import app.wallpaper.modules.base.BaseViewModel
 import app.wallpaper.network.Refreshable
 import app.wallpaper.network.controllers.UserApiController

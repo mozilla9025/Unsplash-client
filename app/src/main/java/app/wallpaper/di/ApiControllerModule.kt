@@ -12,7 +12,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-open class ApiControllerModule {
+class ApiControllerModule {
 
     @Provides
     fun provideCurrentUserApiController(api: CurrentUserApi): CurrentUserApiController {

@@ -2,7 +2,7 @@ package app.wallpaper.modules.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
-import app.wallpaper.data.Collection
+import app.wallpaper.domain.data.Collection
 import io.reactivex.disposables.CompositeDisposable
 
 class CollectionDataSourceFactory(private val compositeDisposable: CompositeDisposable?) : DataSource.Factory<Int, Collection>() {

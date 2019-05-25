@@ -1,7 +1,8 @@
 package app.wallpaper.network.api
 
-import app.wallpaper.data.Photo
+import app.wallpaper.domain.data.Photo
 import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -13,13 +14,16 @@ interface PhotosApi {
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,
         @Query("order_by") orderBy: String
-    ): Observable<List<Photo>>
+    ): Single<List<Photo>>
 
     @GET("/photos/{id}")
-    fun getPhotos(@Path("id") id: String): Observable<List<Photo>>
+    fun getPhotos(@Path("id") id: String): Single<List<Photo>>
 
     @GET("/photos/{id}/download")
     fun getDownloadUrl(@Path("id") id: String): Observable<Response<ResponseBody>>
+
+    @GET("/photos/{id}/related")
+    fun getRelatedPhotos(@Path("id") id: String): Single<List<Photo>>
 
     //requires write_likes scope
     @POST("/photos/{id}/like")

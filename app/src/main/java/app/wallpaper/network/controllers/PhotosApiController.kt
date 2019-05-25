@@ -1,7 +1,7 @@
 package app.wallpaper.network.controllers
 
-import app.wallpaper.data.Order
-import app.wallpaper.data.Photo
+import app.wallpaper.domain.data.Order
+import app.wallpaper.domain.data.Photo
 import app.wallpaper.network.api.PhotosApi
 import io.reactivex.Observable
 import okhttp3.ResponseBody

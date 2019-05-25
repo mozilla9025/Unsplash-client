@@ -1,6 +1,6 @@
 package app.wallpaper.network.responses
 
-import app.wallpaper.data.Collection
+import app.wallpaper.domain.data.Collection
 
 class CollectionResponse(var status: ResponseStatus? = null) {
 
