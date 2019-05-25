@@ -3,6 +3,7 @@ package app.wallpaper.network.api
 import app.wallpaper.domain.data.Collection
 import app.wallpaper.domain.data.Photo
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -30,7 +31,7 @@ interface CollectionApi {
     @GET("/collections/{id}")
     fun getCollection(
             @Path("id") id: Int
-    ): Observable<Collection>
+    ): Single<Collection>
 
     @GET("/collections/{id}/photos")
     fun getCollectionPhotos(

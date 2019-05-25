@@ -2,23 +2,18 @@ package app.wallpaper.modules.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
-import app.wallpaper.app.ApplicationLoader
 import app.wallpaper.domain.data.Order
 import app.wallpaper.domain.data.Photo
-import app.wallpaper.network.controllers.PhotosApiController
+import app.wallpaper.domain.usecase.GetPhotosUseCase
 import app.wallpaper.network.responses.PagingResponse
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-
-class PhotoDataSource(private val disposable: CompositeDisposable?) : PageKeyedDataSource<Int, Photo>() {
-
-    @Inject
-    lateinit var photosApiController: PhotosApiController
+class PhotoDataSource(private val disposable: CompositeDisposable,
+                      private val getPhotoUseCase: GetPhotosUseCase) : PageKeyedDataSource<Int, Photo>() {
 
     private var retryCompletable: Completable? = null
 
@@ -29,14 +24,10 @@ class PhotoDataSource(private val disposable: CompositeDisposable?) : PageKeyedD
         MutableLiveData<PagingResponse>()
     }
 
-    init {
-        ApplicationLoader.applicationComponent.inject(this)
-    }
-
     fun retry() {
         if (retryCompletable == null) return
 
-        disposable?.add(retryCompletable!!
+        disposable.add(retryCompletable!!
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { })
@@ -48,7 +39,7 @@ class PhotoDataSource(private val disposable: CompositeDisposable?) : PageKeyedD
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Photo>) {
         val currPage = 1
-        disposable?.add(photosApiController.getPhotos(currPage, params.requestedLoadSize, Order.LATEST)
+        disposable.add(getPhotoUseCase.getPhotos(currPage, params.requestedLoadSize, Order.LATEST)
                 .doOnSubscribe { initialLoad.postValue(PagingResponse.loading()) }
                 .subscribe({ response ->
                     initialLoad.postValue(PagingResponse.success())
@@ -60,7 +51,7 @@ class PhotoDataSource(private val disposable: CompositeDisposable?) : PageKeyedD
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Photo>) {
-        disposable?.add(photosApiController.getPhotos(params.key, params.requestedLoadSize, Order.LATEST)
+        disposable.add(getPhotoUseCase.getPhotos(params.key, params.requestedLoadSize, Order.LATEST)
                 .doOnSubscribe { rangeLoad.postValue(PagingResponse.loading()) }
                 .subscribe({ response ->
                     rangeLoad.postValue(PagingResponse.success())

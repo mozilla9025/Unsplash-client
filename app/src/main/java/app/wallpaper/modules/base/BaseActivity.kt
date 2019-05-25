@@ -1,9 +1,9 @@
 package app.wallpaper.modules.base
 
-import androidx.appcompat.app.AppCompatActivity
 import butterknife.Unbinder
+import dagger.android.support.DaggerAppCompatActivity
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : DaggerAppCompatActivity() {
 
     protected var unbinder: Unbinder? = null
 
@@ -11,4 +11,5 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onDestroy()
         unbinder?.unbind()
     }
+
 }

@@ -1,25 +1,23 @@
 package app.wallpaper.app
 
-import androidx.multidex.MultiDexApplication
-import app.wallpaper.di.*
+import android.content.Context
+import app.wallpaper.di.DaggerAppComponent
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 
-class ApplicationLoader : MultiDexApplication() {
+class ApplicationLoader : DaggerApplication() {
 
-    override fun onCreate() {
-        super.onCreate()
+    private lateinit var injector: AndroidInjector<out DaggerApplication>
 
-        instance = this
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
 
-        applicationComponent = DaggerApplicationComponent.builder()
-                .appModule(AppModule(this))
-                .networkModule(NetworkModule())
-                .apiModule(ApiModule())
-                .apiControllerModule(ApiControllerModule())
+        injector = DaggerAppComponent.builder()
+                .application(this)
                 .build()
     }
 
-    companion object {
-        lateinit var instance: ApplicationLoader
-        lateinit var applicationComponent: ApplicationComponent
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return injector
     }
 }

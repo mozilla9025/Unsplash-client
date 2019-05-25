@@ -6,8 +6,4 @@ import app.wallpaper.modules.base.BaseViewModel
 
 class PhotoDetailsViewModel(application: Application) : BaseViewModel(application) {
 
-    init {
-        ApplicationLoader.applicationComponent.inject(this)
-    }
-
 }

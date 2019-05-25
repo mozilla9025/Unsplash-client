@@ -11,19 +11,19 @@ interface PhotosApi {
 
     @GET("/photos")
     fun getPhotos(
-        @Query("page") page: Int,
-        @Query("per_page") perPage: Int,
-        @Query("order_by") orderBy: String
-    ): Single<List<Photo>>
+            @Query("page") page: Int,
+            @Query("per_page") perPage: Int,
+            @Query("order_by") orderBy: String
+    ): Observable<List<Photo>>
 
     @GET("/photos/{id}")
-    fun getPhotos(@Path("id") id: String): Single<List<Photo>>
+    fun getPhotoById(@Path("id") id: String): Single<Photo>
 
     @GET("/photos/{id}/download")
     fun getDownloadUrl(@Path("id") id: String): Observable<Response<ResponseBody>>
 
     @GET("/photos/{id}/related")
-    fun getRelatedPhotos(@Path("id") id: String): Single<List<Photo>>
+    fun getRelatedPhotos(@Path("id") id: String): Observable<List<Photo>>
 
     //requires write_likes scope
     @POST("/photos/{id}/like")

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
@@ -19,6 +18,8 @@ import app.wallpaper.widget.progress.LoadingView
 import app.wallpaper.widget.progress.swiperefresh.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
+import dagger.android.support.AndroidSupportInjection
+import javax.inject.Inject
 
 class CollectionsFragment : BaseFragment() {
 
@@ -31,8 +32,12 @@ class CollectionsFragment : BaseFragment() {
 
     private lateinit var adapter: CollectionsAdapter
 
-    private val viewModel: CollectionsViewModel by lazy {
-        ViewModelProviders.of(this).get(CollectionsViewModel::class.java)
+    @Inject
+    lateinit var viewModel: CollectionsViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        AndroidSupportInjection.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater,

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
@@ -20,6 +19,8 @@ import app.wallpaper.widget.progress.LoadingView
 import app.wallpaper.widget.progress.swiperefresh.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
+import dagger.android.support.AndroidSupportInjection
+import javax.inject.Inject
 
 class HomeFragment : BaseFragment() {
 
@@ -35,8 +36,12 @@ class HomeFragment : BaseFragment() {
     private lateinit var photoAdapter: PhotoAdapter
     private lateinit var collectionAdapter: UnsplashCollectionAdapter
 
-    private val viewModel: HomeViewModel by lazy {
-        ViewModelProviders.of(this).get(HomeViewModel::class.java)
+    @Inject
+    lateinit var viewModel: HomeViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        AndroidSupportInjection.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater,

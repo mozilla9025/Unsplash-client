@@ -1,22 +1,18 @@
-package app.wallpaper.modules.home
+package app.wallpaper.modules.collections
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
-import app.wallpaper.app.ApplicationLoader
 import app.wallpaper.domain.data.Collection
-import app.wallpaper.network.controllers.CollectionApiController
+import app.wallpaper.domain.usecase.GetCollectionsUseCase
 import app.wallpaper.network.responses.PagingResponse
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class CollectionDataSource(private val disposable: CompositeDisposable?) : PageKeyedDataSource<Int, Collection>() {
-
-    @Inject
-    lateinit var collectionApiController: CollectionApiController
+class CollectionDataSource(private val disposable: CompositeDisposable,
+                           private val getCollectionUseCase: GetCollectionsUseCase) : PageKeyedDataSource<Int, Collection>() {
 
     private var retryCompletable: Completable? = null
 
@@ -27,13 +23,9 @@ class CollectionDataSource(private val disposable: CompositeDisposable?) : PageK
         MutableLiveData<PagingResponse>()
     }
 
-    init {
-        ApplicationLoader.applicationComponent.inject(this)
-    }
-
     fun retry() {
         if (retryCompletable != null) {
-            disposable?.add(retryCompletable!!
+            disposable.add(retryCompletable!!
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { })
@@ -54,7 +46,7 @@ class CollectionDataSource(private val disposable: CompositeDisposable?) : PageK
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Collection>) {
         val currPage = 1
-        disposable?.add(collectionApiController.getCollections(currPage, params.requestedLoadSize)
+        disposable.add(getCollectionUseCase.getCollections(currPage, params.requestedLoadSize)
                 .doOnSubscribe { initialLoad.postValue(PagingResponse.loading()) }
                 .subscribe({ response ->
                     callback.onResult(response, null, currPage + 1)
@@ -66,7 +58,7 @@ class CollectionDataSource(private val disposable: CompositeDisposable?) : PageK
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Collection>) {
-        disposable?.add(collectionApiController.getCollections(params.key, params.requestedLoadSize)
+        disposable.add(getCollectionUseCase.getCollections(params.key, params.requestedLoadSize)
                 .doOnSubscribe { rangeLoad.postValue(PagingResponse.loading()) }
                 .subscribe({ response ->
                     rangeLoad.postValue(PagingResponse.success())

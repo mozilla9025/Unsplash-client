@@ -6,13 +6,16 @@ import androidx.lifecycle.Transformations
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import app.wallpaper.domain.data.Collection
+import app.wallpaper.domain.usecase.GetCollectionsUseCase
 import app.wallpaper.modules.base.BaseViewModel
-import app.wallpaper.modules.home.CollectionDataSource
 import app.wallpaper.modules.home.CollectionDataSourceFactory
 import app.wallpaper.network.Refreshable
 import app.wallpaper.network.responses.PagingResponse
+import javax.inject.Inject
 
-class CollectionsViewModel(application: Application) : BaseViewModel(application), Refreshable {
+class CollectionsViewModel @Inject constructor(application: Application,
+                                               private val getCollectionsUseCase: GetCollectionsUseCase) :
+        BaseViewModel(application), Refreshable {
 
     internal var data: LiveData<PagedList<Collection>>
     private var dataSourceFactory: CollectionDataSourceFactory
@@ -25,7 +28,7 @@ class CollectionsViewModel(application: Application) : BaseViewModel(application
                 .setEnablePlaceholders(false)
                 .build()
 
-        dataSourceFactory = CollectionDataSourceFactory(disposables)
+        dataSourceFactory = CollectionDataSourceFactory(disposables, getCollectionsUseCase)
         data = LivePagedListBuilder<Int, Collection>(dataSourceFactory, config).build()
     }
 
