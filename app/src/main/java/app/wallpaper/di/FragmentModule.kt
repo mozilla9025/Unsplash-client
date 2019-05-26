@@ -2,6 +2,7 @@ package app.wallpaper.di
 
 import app.wallpaper.modules.collections.CollectionsFragment
 import app.wallpaper.modules.home.HomeFragment
+import app.wallpaper.modules.photo.PhotoDetailsFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -12,4 +13,7 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector
     abstract fun contributeCollectionsFragment(): CollectionsFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributePhotoDetailsFragment(): PhotoDetailsFragment
 }

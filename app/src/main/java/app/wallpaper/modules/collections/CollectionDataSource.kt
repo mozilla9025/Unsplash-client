@@ -2,7 +2,7 @@ package app.wallpaper.modules.collections
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
-import app.wallpaper.domain.data.Collection
+import app.wallpaper.domain.data.PhotoCollection
 import app.wallpaper.domain.usecase.GetCollectionsUseCase
 import app.wallpaper.network.responses.PagingResponse
 import io.reactivex.Completable
@@ -12,7 +12,7 @@ import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
 
 class CollectionDataSource(private val disposable: CompositeDisposable,
-                           private val getCollectionUseCase: GetCollectionsUseCase) : PageKeyedDataSource<Int, Collection>() {
+                           private val getCollectionUseCase: GetCollectionsUseCase) : PageKeyedDataSource<Int, PhotoCollection>() {
 
     private var retryCompletable: Completable? = null
 
@@ -44,7 +44,7 @@ class CollectionDataSource(private val disposable: CompositeDisposable,
         }
     }
 
-    override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Collection>) {
+    override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, PhotoCollection>) {
         val currPage = 1
         disposable.add(getCollectionUseCase.getCollections(currPage, params.requestedLoadSize)
                 .doOnSubscribe { initialLoad.postValue(PagingResponse.loading()) }
@@ -57,7 +57,7 @@ class CollectionDataSource(private val disposable: CompositeDisposable,
                 }))
     }
 
-    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Collection>) {
+    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, PhotoCollection>) {
         disposable.add(getCollectionUseCase.getCollections(params.key, params.requestedLoadSize)
                 .doOnSubscribe { rangeLoad.postValue(PagingResponse.loading()) }
                 .subscribe({ response ->
@@ -69,6 +69,6 @@ class CollectionDataSource(private val disposable: CompositeDisposable,
                 }))
     }
 
-    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Collection>) {
+    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, PhotoCollection>) {
     }
 }

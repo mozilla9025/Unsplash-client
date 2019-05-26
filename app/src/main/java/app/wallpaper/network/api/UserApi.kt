@@ -1,7 +1,7 @@
 package app.wallpaper.network.api
 
-import app.wallpaper.domain.data.Collection
 import app.wallpaper.domain.data.Photo
+import app.wallpaper.domain.data.PhotoCollection
 import app.wallpaper.domain.data.User
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -16,9 +16,6 @@ interface UserApi {
     @GET("/users/{username}")
     fun getUser(@Path("username") userName: String): Single<User>
 
-    @GET("/users/{username}/portfolio")
-    fun getPortfolio(@Path("username") userName: String): Single<Response<ResponseBody>>
-
     @GET("/users/{username}/photos")
     fun getPhotos(@Path("username") userName: String): Single<List<Photo>>
 
@@ -28,26 +25,18 @@ interface UserApi {
             @Query("page") page: Int,
             @Query("per_page") perPage: Int,
             @Query("order_by") orderBy: String
-    ): Observable<Response<ResponseBody>>
+    ): Observable<List<Photo>>
 
     @GET("/users/{username}/collections")
-    fun getCollections(
+    fun getUserCollections(
             @Path("username") userName: String,
             @Query("page") page: Int,
             @Query("per_page") perPage: Int
-    ): Observable<List<Collection>>
+    ): Observable<List<PhotoCollection>>
 
     @GET("/users/unsplash/collections")
     fun getUnsplashCollections(
             @Query("page") page: Int,
             @Query("per_page") perPage: Int
-    ): Observable<List<Collection>>
-
-    @GET("/users/{username}/statistics")
-    fun getStatistics(
-            @Path("username") userName: String,
-            @Query("resolution") resolution: String,
-            @Query("quantity") quantity: Int
-    ): Observable<Response<ResponseBody>>
-
+    ): Observable<List<PhotoCollection>>
 }

@@ -35,4 +35,16 @@
         android:label="MoreFragment"
         tools:layout="@layout/fragment_more" />
 
+    <fragment
+        android:id="@+id/photoDetailsFragment"
+        android:name="app.wallpaper.modules.photo.PhotoDetailsFragment"
+        android:label="PhotoDetailsFragment"
+        tools:layout="@layout/fragment_photo">
+        <argument
+            android:name="photo"
+            app:argType="app.wallpaper.domain.data.Photo" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_photoDetailsFragment"
+        app:destination="@id/photoDetailsFragment" />
 </navigation>

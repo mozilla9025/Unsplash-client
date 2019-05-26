@@ -8,14 +8,19 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import app.wallpaper.domain.data.Photo
 import app.wallpaper.domain.usecase.GetPhotosUseCase
+import app.wallpaper.domain.usecase.GetUnsplashCollectionsUseCase
 import app.wallpaper.modules.base.BaseViewModel
 import app.wallpaper.network.Refreshable
 import app.wallpaper.network.responses.CollectionResponse
 import app.wallpaper.network.responses.PagingResponse
+import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(application: Application,
-                                        private val getPhotosUseCase: GetPhotosUseCase) : BaseViewModel(application), Refreshable {
+class HomeViewModel @Inject constructor(
+        application: Application,
+        getPhotosUseCase: GetPhotosUseCase,
+        private val getUnsplashCollectionsUseCase: GetUnsplashCollectionsUseCase
+) : BaseViewModel(application), Refreshable {
 
     internal var data: LiveData<PagedList<Photo>>
     internal val collectionsLiveData: MutableLiveData<CollectionResponse> by lazy {
@@ -26,12 +31,12 @@ class HomeViewModel @Inject constructor(application: Application,
 
     init {
 
-        val config = PagedList.Config.Builder()
-                .setPageSize(10)
-                .setPrefetchDistance(10)
-                .setInitialLoadSizeHint(10)
-                .setEnablePlaceholders(false)
-                .build()
+        val config = PagedList.Config.Builder().apply {
+            setPageSize(10)
+            setPrefetchDistance(10)
+            setInitialLoadSizeHint(10)
+            setEnablePlaceholders(false)
+        }.build()
 
         dataSourceFactory = PhotoDataSourceFactory(disposables, getPhotosUseCase)
         data = LivePagedListBuilder<Int, Photo>(dataSourceFactory, config).build()
@@ -52,10 +57,10 @@ class HomeViewModel @Inject constructor(application: Application,
             Transformations.switchMap<PhotoDataSource, PagingResponse>(dataSourceFactory.dataSourceLiveData, PhotoDataSource::rangeLoad)
 
     internal fun getUnsplashCollections() {
-//        add(userApiController.getUnsplashCollections(1, Int.MAX_VALUE)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .doOnSubscribe { collectionsLiveData.value = CollectionResponse.loading() }
-//                .subscribe({ response -> collectionsLiveData.value = CollectionResponse.success(response) },
-//                        { error -> collectionsLiveData.value = CollectionResponse.failure(error) }))
+        add(getUnsplashCollectionsUseCase.getCollections(1, Int.MAX_VALUE)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { collectionsLiveData.value = CollectionResponse.loading() }
+                .subscribe({ response -> collectionsLiveData.value = CollectionResponse.success(response) },
+                        { error -> collectionsLiveData.value = CollectionResponse.failure(error) }))
     }
 }

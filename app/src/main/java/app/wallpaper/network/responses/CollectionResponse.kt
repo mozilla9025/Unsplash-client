@@ -1,13 +1,13 @@
 package app.wallpaper.network.responses
 
-import app.wallpaper.domain.data.Collection
+import app.wallpaper.domain.data.PhotoCollection
 
 class CollectionResponse(var status: ResponseStatus? = null) {
 
-    var data: List<Collection>? = null
+    var data: List<PhotoCollection>? = null
     var error: Throwable? = null
 
-    constructor(status: ResponseStatus, data: List<Collection>) : this(status) {
+    constructor(status: ResponseStatus, data: List<PhotoCollection>) : this(status) {
         this.data = data
     }
 
@@ -22,7 +22,7 @@ class CollectionResponse(var status: ResponseStatus? = null) {
         }
 
         override fun <V> success(data: V): CollectionResponse {
-            return CollectionResponse(ResponseStatus.SUCCESS, data as List<Collection>)
+            return CollectionResponse(ResponseStatus.SUCCESS, data as List<PhotoCollection>)
         }
 
         override fun failure(error: Throwable): CollectionResponse {

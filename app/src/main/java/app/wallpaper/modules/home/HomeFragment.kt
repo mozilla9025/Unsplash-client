@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
+import app.wallpaper.domain.data.Photo
 import app.wallpaper.modules.base.BaseFragment
 import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.CollectionResponse
@@ -15,6 +17,7 @@ import app.wallpaper.network.responses.PagingResponse
 import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.recycler.MarginItemDecoration
+import app.wallpaper.widget.ClickListener
 import app.wallpaper.widget.progress.LoadingView
 import app.wallpaper.widget.progress.swiperefresh.SwipeRefreshLayout
 import butterknife.BindView
@@ -56,6 +59,15 @@ class HomeFragment : BaseFragment() {
                 viewModel.retry()
             }
         })
+
+        photoAdapter.clickListener = object : ClickListener<Photo> {
+            override fun onItemClick(item: Photo) {
+                val args = Bundle().apply {
+                    putParcelable("photo", item)
+                }
+                view?.findNavController()?.navigate(R.id.action_global_photoDetailsFragment, args)
+            }
+        }
 
         swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
         rvPhotos.adapter = photoAdapter

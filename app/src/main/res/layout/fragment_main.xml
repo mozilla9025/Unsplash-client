@@ -11,13 +11,13 @@
         android:layout_width="@dimen/dp0"
         android:layout_height="@dimen/dp0"
         app:defaultNavHost="false"
-        app:layout_constraintBottom_toTopOf="@+id/view_bottom_navigation"
+        app:layout_constraintBottom_toTopOf="@+id/viewBottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/view_bottom_navigation"
+        android:id="@+id/viewBottomNavigation"
         android:layout_width="@dimen/dp0"
         android:layout_height="@dimen/dp48"
         android:layout_gravity="bottom"

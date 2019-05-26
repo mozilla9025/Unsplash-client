@@ -1,8 +1,11 @@
 package app.wallpaper.domain.data
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-data class Collection(
+@Parcelize
+data class PhotoCollection(
         @SerializedName("id") val id: Int,
         @SerializedName("title") val title: String,
         @SerializedName("description") val description: String,
@@ -16,5 +19,4 @@ data class Collection(
         @SerializedName("user") val user: User,
         @SerializedName("links") val links: CollectionLinks,
         @SerializedName("preview_photos") val previews: List<Photo>
-) {
-}
+) : Parcelable

@@ -19,9 +19,6 @@ interface PhotosApi {
     @GET("/photos/{id}")
     fun getPhotoById(@Path("id") id: String): Single<Photo>
 
-    @GET("/photos/{id}/download")
-    fun getDownloadUrl(@Path("id") id: String): Observable<Response<ResponseBody>>
-
     @GET("/photos/{id}/related")
     fun getRelatedPhotos(@Path("id") id: String): Observable<List<Photo>>
 

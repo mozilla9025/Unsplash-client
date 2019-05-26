@@ -1,5 +1,5 @@
 package app.wallpaper.widget
 
-interface BaseClickListener<T> {
+interface ClickListener<T> {
     fun onItemClick(item: T)
 }

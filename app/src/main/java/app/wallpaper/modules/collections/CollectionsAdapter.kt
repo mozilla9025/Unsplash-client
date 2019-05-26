@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
 import app.wallpaper.app.GlideApp
-import app.wallpaper.domain.data.Collection
+import app.wallpaper.domain.data.PhotoCollection
 import app.wallpaper.modules.base.BaseViewHolder
 import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.ResponseStatus
@@ -18,17 +18,17 @@ import kotlinx.android.synthetic.main.include_collection_name.view.*
 import kotlinx.android.synthetic.main.item_collection.view.*
 import kotlinx.android.synthetic.main.item_collection_album.view.*
 
-class CollectionsAdapter(private var retryCallback: Retryable) : PagedListAdapter<Collection, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
+class CollectionsAdapter(private var retryCallback: Retryable) : PagedListAdapter<PhotoCollection, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     private var response: ResponseStatus = ResponseStatus.SUCCESS
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Collection>() {
-            override fun areItemsTheSame(oldItem: Collection, newItem: Collection): Boolean {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PhotoCollection>() {
+            override fun areItemsTheSame(oldItem: PhotoCollection, newItem: PhotoCollection): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: Collection, newItem: Collection): Boolean {
+            override fun areContentsTheSame(oldItem: PhotoCollection, newItem: PhotoCollection): Boolean {
                 return oldItem.id == newItem.id
             }
         }
@@ -97,9 +97,9 @@ class CollectionsAdapter(private var retryCallback: Retryable) : PagedListAdapte
         }
     }
 
-    inner class CollectionViewHolder(itemView: View, private var viewType: Int) : BaseViewHolder<Collection>(itemView) {
+    inner class CollectionViewHolder(itemView: View, private var viewType: Int) : BaseViewHolder<PhotoCollection>(itemView) {
 
-        override fun bind(item: Collection) {
+        override fun bind(item: PhotoCollection) {
 
             when (viewType) {
                 SINGLE_IMAGE -> bindSingleImage(item)
@@ -111,14 +111,14 @@ class CollectionsAdapter(private var retryCallback: Retryable) : PagedListAdapte
                     item.totalPhotos.toString(), item.user.name)
         }
 
-        private fun bindSingleImage(item: Collection) {
+        private fun bindSingleImage(item: PhotoCollection) {
             GlideApp.with(itemView)
                     .load(item.coverPhoto.urls.regular)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(itemView.iv_cover)
         }
 
-        private fun bindMultipleImages(item: Collection) {
+        private fun bindMultipleImages(item: PhotoCollection) {
             GlideApp.with(itemView)
                     .load(item.previews[0].urls.regular)
                     .transition(DrawableTransitionOptions.withCrossFade())

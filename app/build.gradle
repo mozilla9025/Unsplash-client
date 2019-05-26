@@ -1,8 +1,12 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+
+androidExtensions{
+    experimental = true
+}
 
 android {
     compileSdkVersion 28
@@ -21,6 +25,11 @@ android {
         buildConfigField 'String', "ApiKey", apiKey
         buildConfigField 'String', "ApiSecret", apiSecret
     }
+
+    dataBinding {
+        enabled = true
+    }
+
     buildTypes {
         release {
             minifyEnabled true

@@ -1,6 +1,6 @@
 package app.wallpaper.network.api
 
-import app.wallpaper.domain.data.Collection
+import app.wallpaper.domain.data.PhotoCollection
 import app.wallpaper.domain.data.Photo
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -14,24 +14,24 @@ interface CollectionApi {
     fun getCollections(
             @Query("page") page: Int,
             @Query("per_page") perPage: Int
-    ): Observable<List<Collection>>
+    ): Observable<List<PhotoCollection>>
 
     @GET("/collections/featured")
     fun getFeaturedCollections(
             @Query("page") page: Int,
             @Query("per_page") perPage: Int
-    ): Observable<List<Collection>>
+    ): Observable<List<PhotoCollection>>
 
     @GET("/collections/curated")
     fun getCuratedCollections(
             @Query("page") page: Int,
             @Query("per_page") perPage: Int
-    ): Observable<List<Collection>>
+    ): Observable<List<PhotoCollection>>
 
     @GET("/collections/{id}")
     fun getCollection(
             @Path("id") id: Int
-    ): Single<Collection>
+    ): Single<PhotoCollection>
 
     @GET("/collections/{id}/photos")
     fun getCollectionPhotos(
@@ -41,6 +41,6 @@ interface CollectionApi {
     @GET("/collections/{id}/related")
     fun getRelatedCollections(
             @Path("id") id: Int
-    ): Observable<List<Collection>>
+    ): Observable<List<PhotoCollection>>
 
 }

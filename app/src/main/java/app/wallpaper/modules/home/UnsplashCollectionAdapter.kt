@@ -5,15 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
-import app.wallpaper.domain.data.Collection
+import app.wallpaper.domain.data.PhotoCollection
 import app.wallpaper.modules.base.BaseViewHolder
 import kotlinx.android.synthetic.main.item_unsplash_collection.view.*
 
 class UnsplashCollectionAdapter : RecyclerView.Adapter<UnsplashCollectionAdapter.UnsplashCollectionViewHolder>() {
 
-    private var data: List<Collection>? = null
+    private var data: List<PhotoCollection>? = null
 
-    internal fun updateData(data: List<Collection>?) {
+    internal fun updateData(data: List<PhotoCollection>?) {
         this.data = data
         notifyDataSetChanged()
     }
@@ -28,8 +28,8 @@ class UnsplashCollectionAdapter : RecyclerView.Adapter<UnsplashCollectionAdapter
         data?.get(holder.adapterPosition)?.let { holder.bind(it) }
     }
 
-    inner class UnsplashCollectionViewHolder(itemView: View) : BaseViewHolder<Collection>(itemView) {
-        override fun bind(item: Collection) {
+    inner class UnsplashCollectionViewHolder(itemView: View) : BaseViewHolder<PhotoCollection>(itemView) {
+        override fun bind(item: PhotoCollection) {
             itemView.tv_unsplash_collection.text = item.title
         }
     }

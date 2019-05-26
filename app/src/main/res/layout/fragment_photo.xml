@@ -34,10 +34,11 @@
                     android:id="@+id/btn_info"
                     android:layout_width="@dimen/dp32"
                     android:layout_height="@dimen/dp32"
+                    android:layout_marginEnd="@dimen/dp8"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_info"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/btn_share"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
@@ -58,6 +59,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ImageView
+            android:id="@+id/ivPhoto"
+            android:layout_width="@dimen/dp0"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

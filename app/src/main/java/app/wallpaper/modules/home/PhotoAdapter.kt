@@ -15,12 +15,14 @@ import app.wallpaper.modules.base.BaseViewHolder
 import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.recycler.PagingFooterViewHolder
+import app.wallpaper.widget.ClickListener
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.item_photo.view.*
 
 
 class PhotoAdapter(private var retryCallback: Retryable) : PagedListAdapter<Photo, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
+    var clickListener: ClickListener<Photo>? = null
     private var response: ResponseStatus = ResponseStatus.SUCCESS
 
     fun updateResponse(response: ResponseStatus) {
@@ -83,6 +85,8 @@ class PhotoAdapter(private var retryCallback: Retryable) : PagedListAdapter<Phot
 
     inner class PhotoItemViewHolder(itemView: View) : BaseViewHolder<Photo>(itemView) {
         override fun bind(item: Photo) {
+
+            itemView.setOnClickListener { clickListener?.onItemClick(item) }
 
             GlideApp.with(itemView)
                     .load(item.user.avatar.medium)
