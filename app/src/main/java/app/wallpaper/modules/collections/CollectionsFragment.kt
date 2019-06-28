@@ -1,9 +1,7 @@
 package app.wallpaper.modules.collections
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,23 +10,16 @@ import app.wallpaper.modules.base.BaseFragment
 import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.PagingResponse
 import app.wallpaper.network.responses.ResponseStatus
+import app.wallpaper.util.annotation.Layout
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.recycler.MarginItemDecoration
 import app.wallpaper.widget.progress.LoadingView
-import app.wallpaper.widget.progress.swiperefresh.SwipeRefreshLayout
-import butterknife.BindView
-import butterknife.ButterKnife
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.fragment_collections.*
 import javax.inject.Inject
 
+@Layout(R.layout.fragment_collections)
 class CollectionsFragment : BaseFragment() {
-
-    @BindView(R.id.rv_collections)
-    lateinit var rvCollections: RecyclerView
-    @BindView(R.id.loading_collections)
-    lateinit var loadingView: LoadingView
-    @BindView(R.id.srl_collections)
-    lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private lateinit var adapter: CollectionsAdapter
 
@@ -40,14 +31,8 @@ class CollectionsFragment : BaseFragment() {
         AndroidSupportInjection.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        val view = inflater.inflate(R.layout.fragment_collections, container, false)
-        unbinder = ButterKnife.bind(this, view)
-
-        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        srlCollections.setOnRefreshListener { viewModel.refresh() }
 
         adapter = CollectionsAdapter(object : Retryable {
             override fun retry() {
@@ -59,7 +44,6 @@ class CollectionsFragment : BaseFragment() {
         rvCollections.addItemDecoration(MarginItemDecoration(4.dp, 0.dp, RecyclerView.VERTICAL))
 
         observeData()
-        return view
     }
 
     private fun observeData() {
@@ -77,18 +61,18 @@ class CollectionsFragment : BaseFragment() {
     private fun handleInitialLoad(response: PagingResponse) {
         when (response.status) {
             ResponseStatus.SUCCESS -> {
-                if (swipeRefreshLayout.isRefreshing)
-                    swipeRefreshLayout.isRefreshing = false
+                if (srlCollections.isRefreshing)
+                    srlCollections.isRefreshing = false
 
-                loadingView.onSuccess()
+                loadingCollections.onSuccess()
                 rvCollections.visibility = View.VISIBLE
             }
             ResponseStatus.FAILURE -> {
-                if (swipeRefreshLayout.isRefreshing)
-                    swipeRefreshLayout.isRefreshing = false
+                if (srlCollections.isRefreshing)
+                    srlCollections.isRefreshing = false
 
                 rvCollections.visibility = View.GONE
-                loadingView.onError(response.error?.message
+                loadingCollections.onError(response.error?.message
                         ?: getString(R.string.Api_Call_Default_Error_Message),
                         object : LoadingView.OnRetryClickListener {
                             override fun onRetryClicked() {
@@ -99,7 +83,7 @@ class CollectionsFragment : BaseFragment() {
             ResponseStatus.LOADING -> {
                 if (adapter.currentList == null || adapter.currentList!!.isEmpty()) {
                     rvCollections.visibility = View.GONE
-                    loadingView.onLoading()
+                    loadingCollections.onLoading()
                 }
             }
         }

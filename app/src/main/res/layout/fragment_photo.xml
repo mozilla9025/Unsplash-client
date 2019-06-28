@@ -21,7 +21,7 @@
                 android:layout_height="match_parent">
 
                 <ImageButton
-                    android:id="@+id/btn_back"
+                    android:id="@+id/ibBack"
                     android:layout_width="@dimen/dp32"
                     android:layout_height="@dimen/dp32"
                     android:background="?attr/selectableItemBackgroundBorderless"
@@ -31,18 +31,18 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
-                    android:id="@+id/btn_info"
+                    android:id="@+id/ibInfo"
                     android:layout_width="@dimen/dp32"
                     android:layout_height="@dimen/dp32"
                     android:layout_marginEnd="@dimen/dp8"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_info"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/btn_share"
+                    app:layout_constraintEnd_toStartOf="@id/ibShare"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
-                    android:id="@+id/btn_share"
+                    android:id="@+id/ibShare"
                     android:layout_width="@dimen/dp32"
                     android:layout_height="@dimen/dp32"
                     android:background="?attr/selectableItemBackgroundBorderless"
@@ -67,6 +67,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

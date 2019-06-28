@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
        <app.wallpaper.widget.progress.swiperefresh.SwipeRefreshLayout
-           android:id="@+id/srl_collections"
+           android:id="@+id/srlCollections"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content">
 
@@ -14,7 +14,7 @@
             android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_collections"
+                android:id="@+id/rvCollections"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:overScrollMode="never"
@@ -24,7 +24,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
              <app.wallpaper.widget.progress.LoadingView
-                 android:id="@+id/loading_collections"
+                 android:id="@+id/loadingCollections"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:layout_gravity="center"

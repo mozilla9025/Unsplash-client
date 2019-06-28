@@ -15,26 +15,17 @@ import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.CollectionResponse
 import app.wallpaper.network.responses.PagingResponse
 import app.wallpaper.network.responses.ResponseStatus
+import app.wallpaper.util.annotation.Layout
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.recycler.MarginItemDecoration
 import app.wallpaper.widget.ClickListener
 import app.wallpaper.widget.progress.LoadingView
-import app.wallpaper.widget.progress.swiperefresh.SwipeRefreshLayout
-import butterknife.BindView
-import butterknife.ButterKnife
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
+@Layout(R.layout.fragment_home)
 class HomeFragment : BaseFragment() {
-
-    @BindView(R.id.rv_photos)
-    lateinit var rvPhotos: RecyclerView
-    @BindView(R.id.rv_unsplash_collections)
-    lateinit var rvCollections: RecyclerView
-    @BindView(R.id.loading_home)
-    lateinit var loadingView: LoadingView
-    @BindView(R.id.srl_home)
-    lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private lateinit var photoAdapter: PhotoAdapter
     private lateinit var collectionAdapter: UnsplashCollectionAdapter
@@ -47,13 +38,7 @@ class HomeFragment : BaseFragment() {
         AndroidSupportInjection.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
-        unbinder = ButterKnife.bind(this, view)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         photoAdapter = PhotoAdapter(object : Retryable {
             override fun retry() {
                 viewModel.retry()
@@ -65,24 +50,23 @@ class HomeFragment : BaseFragment() {
                 val args = Bundle().apply {
                     putParcelable("photo", item)
                 }
-                view?.findNavController()?.navigate(R.id.action_global_photoDetailsFragment, args)
+                view.findNavController().navigate(R.id.action_global_photoDetailsFragment, args)
             }
         }
 
-        swipeRefreshLayout.setOnRefreshListener { viewModel.refresh() }
+        srlHome.setOnRefreshListener { viewModel.refresh() }
         rvPhotos.adapter = photoAdapter
         rvPhotos.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
         rvPhotos.addItemDecoration(MarginItemDecoration(4.dp, 0.dp, RecyclerView.VERTICAL))
 
         collectionAdapter = UnsplashCollectionAdapter()
-        rvCollections.adapter = collectionAdapter
-        rvCollections.layoutManager = LinearLayoutManager(context!!, RecyclerView.HORIZONTAL, false)
-        rvCollections.addItemDecoration(MarginItemDecoration(0.dp, 4.dp, RecyclerView.HORIZONTAL))
+        rvUnsplashCollections.adapter = collectionAdapter
+        rvUnsplashCollections.layoutManager = LinearLayoutManager(context!!, RecyclerView.HORIZONTAL, false)
+        rvUnsplashCollections.addItemDecoration(MarginItemDecoration(0.dp, 4.dp, RecyclerView.HORIZONTAL))
 
         observeData()
 
         viewModel.getUnsplashCollections()
-        return view
     }
 
     private fun observeData() {
@@ -101,14 +85,14 @@ class HomeFragment : BaseFragment() {
     private fun handleInitialLoad(response: PagingResponse) {
         when (response.status) {
             ResponseStatus.SUCCESS -> {
-                if (swipeRefreshLayout.isRefreshing) swipeRefreshLayout.isRefreshing = false
-                loadingView.onSuccess()
+                if (srlHome.isRefreshing) srlHome.isRefreshing = false
+                loadingHome.onSuccess()
                 rvPhotos.visibility = View.VISIBLE
             }
             ResponseStatus.FAILURE -> {
-                if (swipeRefreshLayout.isRefreshing) swipeRefreshLayout.isRefreshing = false
+                if (srlHome.isRefreshing) srlHome.isRefreshing = false
                 rvPhotos.visibility = View.GONE
-                loadingView.onError(response.error?.message
+                loadingHome.onError(response.error?.message
                         ?: getString(R.string.Api_Call_Default_Error_Message), object : LoadingView.OnRetryClickListener {
                     override fun onRetryClicked() {
                         viewModel.retry()
@@ -118,7 +102,7 @@ class HomeFragment : BaseFragment() {
             ResponseStatus.LOADING -> {
                 if (photoAdapter.currentList == null || photoAdapter.currentList!!.isEmpty()) {
                     rvPhotos.visibility = View.GONE
-                    loadingView.onLoading()
+                    loadingHome.onLoading()
                 }
             }
         }
@@ -128,13 +112,13 @@ class HomeFragment : BaseFragment() {
         when (response.status) {
             ResponseStatus.SUCCESS -> {
                 collectionAdapter.updateData(response.data)
-                rvCollections.visibility = View.VISIBLE
+                rvUnsplashCollections.visibility = View.VISIBLE
             }
             ResponseStatus.FAILURE -> {
-                rvCollections.visibility = View.GONE
+                rvUnsplashCollections.visibility = View.GONE
             }
             ResponseStatus.LOADING -> {
-                rvCollections.visibility = View.GONE
+                rvUnsplashCollections.visibility = View.GONE
             }
         }
     }

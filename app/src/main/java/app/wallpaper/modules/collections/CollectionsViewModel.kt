@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class CollectionsViewModel @Inject constructor(
         application: Application,
-        private val getCollectionsUseCase: GetCollectionsUseCase
+        getCollectionsUseCase: GetCollectionsUseCase
 ) : BaseViewModel(application), Refreshable {
 
     internal var data: LiveData<PagedList<PhotoCollection>>

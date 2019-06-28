@@ -18,7 +18,7 @@
             app:layout_scrollFlags="scroll|enterAlways">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_unsplash_collections"
+                android:id="@+id/rvUnsplashCollections"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -30,7 +30,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <app.wallpaper.widget.progress.swiperefresh.SwipeRefreshLayout
-        android:id="@+id/srl_home"
+        android:id="@+id/srlHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_photos"
+                android:id="@+id/rvPhotos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
@@ -51,7 +51,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <app.wallpaper.widget.progress.LoadingView
-                android:id="@+id/loading_home"
+                android:id="@+id/loadingHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

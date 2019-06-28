@@ -10,10 +10,12 @@ import app.wallpaper.app.GlideApp
 import app.wallpaper.modules.base.BaseFragment
 import app.wallpaper.network.responses.PhotoListResponse
 import app.wallpaper.network.responses.ResponseStatus
+import app.wallpaper.util.annotation.Layout
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_photo.*
 import javax.inject.Inject
 
+@Layout(R.layout.fragment_photo)
 class PhotoDetailsFragment : BaseFragment() {
 
     @Inject
