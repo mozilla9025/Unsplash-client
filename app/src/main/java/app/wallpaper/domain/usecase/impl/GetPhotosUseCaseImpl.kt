@@ -6,6 +6,7 @@ import app.wallpaper.domain.repo.PhotoRepository
 import app.wallpaper.domain.usecase.GetPhotosUseCase
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class GetPhotosUseCaseImpl @Inject constructor(private val repository: PhotoRepository) : GetPhotosUseCase {
@@ -19,6 +20,7 @@ class GetPhotosUseCaseImpl @Inject constructor(private val repository: PhotoRepo
 
     override fun getRelatedPhotos(id: String): Observable<List<Photo>> {
         return repository.getRelatedPhotos(id)
+                .subscribeOn(Schedulers.io())
     }
 
     override fun getCollectionPhotos(collectionId: Int): Observable<List<Photo>> {

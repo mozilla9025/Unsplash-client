@@ -4,6 +4,7 @@ import android.app.Application
 import app.wallpaper.BuildConfig
 import app.wallpaper.app.Constants
 import app.wallpaper.network.HeaderInterceptor
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -27,8 +28,8 @@ class NetworkModule {
     fun provideOkHttpClient(cache: Cache): OkHttpClient {
         val client = OkHttpClient.Builder()
         client.connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(1, TimeUnit.MINUTES)
-            .writeTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(1, TimeUnit.MINUTES)
+                .writeTimeout(1, TimeUnit.MINUTES)
 
         client.addInterceptor(HeaderInterceptor(BuildConfig.ApiKey))
 
@@ -44,10 +45,13 @@ class NetworkModule {
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
+                .baseUrl(Constants.BASE_URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build()
     }
+
+    @Provides
+    fun provideGson(): Gson = Gson()
 }

@@ -4,9 +4,17 @@ import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>>() {
 
-    lateinit var data: List<T>
+    var data: List<T>? = null
 
-    protected fun updateData(data: List<T>) {}
+    override fun getItemCount(): Int {
+        return data?.size ?: 0
+    }
+
+    fun updateData(data: List<T>?) {
+        this.data = data
+        notifyDataSetChanged()
+    }
+
     protected fun add(item: T) {}
     protected fun remove(item: T) {}
 }

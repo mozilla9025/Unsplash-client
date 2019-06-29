@@ -20,7 +20,7 @@ interface PhotosApi {
     fun getPhotoById(@Path("id") id: String): Single<Photo>
 
     @GET("/photos/{id}/related")
-    fun getRelatedPhotos(@Path("id") id: String): Observable<List<Photo>>
+    fun getRelatedPhotos(@Path("id") id: String): Observable<ResponseBody>
 
     //requires write_likes scope
     @POST("/photos/{id}/like")

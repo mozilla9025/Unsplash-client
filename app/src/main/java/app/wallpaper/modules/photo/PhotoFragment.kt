@@ -4,17 +4,21 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
 import app.wallpaper.app.GlideApp
 import app.wallpaper.modules.base.BaseFragment
+import app.wallpaper.modules.home.RelatedPhotosAdapter
 import app.wallpaper.network.responses.PhotoListResponse
 import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.annotation.Layout
+import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.extentions.getLinkName
+import app.wallpaper.util.extentions.loge
+import app.wallpaper.util.recycler.MarginItemDecoration
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_photo.*
@@ -83,10 +87,18 @@ class PhotoFragment : BaseFragment() {
     private fun handleRelatedPhotosResponse(response: PhotoListResponse?) {
         when (response?.status) {
             ResponseStatus.SUCCESS -> {
+                rvRelatedPhotos?.run {
+                    layoutManager = GridLayoutManager(context!!, 2)
+                    adapter = RelatedPhotosAdapter().apply {
+                        updateData(response.data)
+                    }
+                    addItemDecoration(MarginItemDecoration(1.dp, 1.dp, RecyclerView.VERTICAL))
+                }
             }
             ResponseStatus.LOADING -> {
             }
             ResponseStatus.FAILURE -> {
+                response.error?.let { loge("err", it) }
             }
         }
     }
