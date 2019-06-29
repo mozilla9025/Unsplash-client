@@ -9,7 +9,6 @@ import app.wallpaper.R
 import app.wallpaper.modules.base.BaseFragment
 import app.wallpaper.modules.base.SelectableFragment
 import app.wallpaper.util.annotation.Layout
-import app.wallpaper.util.extentions.logi
 import app.wallpaper.util.navigation.KeepStateNavigator
 import kotlinx.android.synthetic.main.fragment_main.*
 
@@ -17,8 +16,6 @@ import kotlinx.android.synthetic.main.fragment_main.*
 class MainNavFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        logi("OnViewCreated")
 
         val navHostFragment = childFragmentManager.findFragmentById(R.id.main_fragment_nav_host)
         val navController = Navigation.findNavController(navHostFragment!!.view!!)
