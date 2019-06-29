@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/homeFragment"
+        android:id="@+id/homeNavFragment"
         android:enabled="true"
         android:icon="@drawable/ic_home"
         android:title="@null"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/collectionsFragment"
+        android:id="@+id/collectionsNavFragment"
         android:enabled="true"
         android:icon="@drawable/ic_image"
         android:title="@null"

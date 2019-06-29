@@ -113,24 +113,24 @@ class CollectionsAdapter(private var retryCallback: Retryable) : PagedListAdapte
 
         private fun bindSingleImage(item: PhotoCollection) {
             GlideApp.with(itemView)
-                    .load(item.coverPhoto.urls.regular)
+                    .load(item.coverPhoto.urls?.regular)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(itemView.iv_cover)
         }
 
         private fun bindMultipleImages(item: PhotoCollection) {
             GlideApp.with(itemView)
-                    .load(item.previews[0].urls.regular)
+                    .load(item.previews[0].urls?.regular)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(itemView.iv_preview1)
 
             GlideApp.with(itemView)
-                    .load(item.previews[1].urls.regular)
+                    .load(item.previews[1].urls?.regular)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(itemView.iv_preview2)
 
             GlideApp.with(itemView)
-                    .load(item.previews[2].urls.regular)
+                    .load(item.previews[2].urls?.regular)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(itemView.iv_preview3)
         }

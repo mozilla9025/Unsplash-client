@@ -89,16 +89,16 @@ class PhotoAdapter(private var retryCallback: Retryable) : PagedListAdapter<Phot
             itemView.setOnClickListener { clickListener?.onItemClick(item) }
 
             GlideApp.with(itemView)
-                    .load(item.user.avatar.medium)
+                    .load(item.user?.avatar?.medium)
                     .into(itemView.iv_avatar)
 
             GlideApp.with(itemView)
-                    .load(item.urls.regular)
+                    .load(item.urls?.regular)
                     .placeholder(ColorDrawable(Color.parseColor(item.color)))
                     .transition(DrawableTransitionOptions.withCrossFade(200))
                     .into(itemView.iv_image)
 
-            itemView.tv_name.text = item.user.name
+            itemView.tv_name.text = item.user?.name
         }
     }
 }

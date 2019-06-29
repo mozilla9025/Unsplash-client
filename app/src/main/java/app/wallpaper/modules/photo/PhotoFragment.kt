@@ -1,10 +1,9 @@
 package app.wallpaper.modules.photo
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import app.wallpaper.R
 import app.wallpaper.app.GlideApp
 import app.wallpaper.modules.base.BaseFragment
@@ -16,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_photo.*
 import javax.inject.Inject
 
 @Layout(R.layout.fragment_photo)
-class PhotoDetailsFragment : BaseFragment() {
+class PhotoFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModel: PhotoDetailsViewModel
@@ -26,19 +25,22 @@ class PhotoDetailsFragment : BaseFragment() {
         AndroidSupportInjection.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_photo, container, false)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.photo = arguments?.getParcelable("photo")
+        arguments?.let {
+            viewModel.photo = PhotoFragmentArgs.fromBundle(it).photo
+        }
+
         GlideApp.with(this)
                 .load(viewModel.photo?.urls?.regular!!)
                 .into(ivPhoto)
         observeData()
         viewModel.getRelatedPhotos()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Navigation.findNavController(view!!).navigateUp()
     }
 
     private fun observeData() {
@@ -49,11 +51,9 @@ class PhotoDetailsFragment : BaseFragment() {
         when (response?.status) {
             ResponseStatus.SUCCESS -> {
             }
-            ResponseStatus.LOADING
-            -> {
+            ResponseStatus.LOADING -> {
             }
-            ResponseStatus.FAILURE
-            -> {
+            ResponseStatus.FAILURE -> {
             }
         }
     }

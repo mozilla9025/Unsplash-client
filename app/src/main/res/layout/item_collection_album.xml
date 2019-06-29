@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
+    android:elevation="@dimen/dp2"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,51 +17,51 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/iv_preview1"
-        android:layout_width="@dimen/dp0"
-        android:layout_height="@dimen/dp0"
-        android:background="@color/lightGray"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.66" />
+        <ImageView
+            android:id="@+id/iv_preview1"
+            android:layout_width="@dimen/dp0"
+            android:layout_height="@dimen/dp0"
+            android:background="@color/lightGray"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.66" />
 
-    <ImageView
-        android:id="@+id/iv_preview2"
-        android:layout_width="@dimen/dp0"
-        android:layout_height="@dimen/dp0"
-        android:layout_marginStart="@dimen/dp2"
-        android:layout_marginBottom="@dimen/dp1"
-        android:background="@color/lightGray"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@id/iv_preview3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iv_preview1"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/iv_preview2"
+            android:layout_width="@dimen/dp0"
+            android:layout_height="@dimen/dp0"
+            android:layout_marginStart="@dimen/dp2"
+            android:layout_marginBottom="@dimen/dp1"
+            android:background="@color/lightGray"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@id/iv_preview3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_preview1"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/iv_preview3"
-        android:layout_width="@dimen/dp0"
-        android:layout_height="@dimen/dp0"
-        android:layout_marginStart="@dimen/dp2"
-        android:layout_marginTop="@dimen/dp1"
-        android:background="@color/lightGray"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="@id/iv_preview1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iv_preview1"
-        app:layout_constraintTop_toBottomOf="@id/iv_preview2" />
+        <ImageView
+            android:id="@+id/iv_preview3"
+            android:layout_width="@dimen/dp0"
+            android:layout_height="@dimen/dp0"
+            android:layout_marginStart="@dimen/dp2"
+            android:layout_marginTop="@dimen/dp1"
+            android:background="@color/lightGray"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@id/iv_preview1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_preview1"
+            app:layout_constraintTop_toBottomOf="@id/iv_preview2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-   <include
-       layout="@layout/include_collection_name"
-       android:layout_width="@dimen/dp0"
-       android:layout_height="wrap_content"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintTop_toBottomOf="@id/cl_previews" />
+    <include
+        layout="@layout/include_collection_name"
+        android:layout_width="@dimen/dp0"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_previews" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

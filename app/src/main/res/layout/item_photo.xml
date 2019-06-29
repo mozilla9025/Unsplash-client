@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground">
+    android:background="@color/white"
+    android:elevation="@dimen/dp2">
+
     <ImageView
         android:id="@+id/iv_image"
         android:layout_width="@dimen/dp0"
@@ -24,19 +26,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_avatar"
-        android:layout_width="@dimen/dp36"
-        android:layout_height="@dimen/dp36"
-        android:layout_marginStart="@dimen/dp12"
-        android:layout_marginTop="@dimen/dp8"
-        android:layout_marginBottom="@dimen/dp8"
-        app:civ_border_color="@color/white"
-        app:civ_border_overlay="false"
-        app:civ_border_width="@dimen/dp1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="@dimen/dp36"
+            android:layout_height="@dimen/dp36"
+            android:layout_marginStart="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp8"
+            app:civ_border_color="@color/white"
+            app:civ_border_overlay="false"
+            app:civ_border_width="@dimen/dp1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_name"

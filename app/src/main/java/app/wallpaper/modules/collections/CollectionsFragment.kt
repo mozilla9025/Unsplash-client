@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
-import app.wallpaper.modules.base.BaseFragment
+import app.wallpaper.modules.base.SelectableFragment
 import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.PagingResponse
 import app.wallpaper.network.responses.ResponseStatus
@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_collections.*
 import javax.inject.Inject
 
 @Layout(R.layout.fragment_collections)
-class CollectionsFragment : BaseFragment() {
+class CollectionsFragment : SelectableFragment() {
 
     private lateinit var adapter: CollectionsAdapter
 
@@ -44,6 +44,10 @@ class CollectionsFragment : BaseFragment() {
         rvCollections.addItemDecoration(MarginItemDecoration(4.dp, 0.dp, RecyclerView.VERTICAL))
 
         observeData()
+    }
+
+    override fun onFragmentSelected() {
+        rvCollections?.scrollToPosition(0)
     }
 
     private fun observeData() {

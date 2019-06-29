@@ -1,16 +1,14 @@
 package app.wallpaper.modules.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
 import app.wallpaper.domain.data.Photo
-import app.wallpaper.modules.base.BaseFragment
+import app.wallpaper.modules.base.SelectableFragment
 import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.CollectionResponse
 import app.wallpaper.network.responses.PagingResponse
@@ -25,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
 @Layout(R.layout.fragment_home)
-class HomeFragment : BaseFragment() {
+class HomeFragment : SelectableFragment() {
 
     private lateinit var photoAdapter: PhotoAdapter
     private lateinit var collectionAdapter: UnsplashCollectionAdapter
@@ -36,6 +34,7 @@ class HomeFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidSupportInjection.inject(this)
+        viewModel.getUnsplashCollections()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,10 +46,8 @@ class HomeFragment : BaseFragment() {
 
         photoAdapter.clickListener = object : ClickListener<Photo> {
             override fun onItemClick(item: Photo) {
-                val args = Bundle().apply {
-                    putParcelable("photo", item)
-                }
-                view.findNavController().navigate(R.id.action_global_photoDetailsFragment, args)
+                view.findNavController()
+                        .navigate(HomeFragmentDirections.actionHomeFragmentToPhotoDetailsFragment(item))
             }
         }
 
@@ -65,8 +62,11 @@ class HomeFragment : BaseFragment() {
         rvUnsplashCollections.addItemDecoration(MarginItemDecoration(0.dp, 4.dp, RecyclerView.HORIZONTAL))
 
         observeData()
+    }
 
-        viewModel.getUnsplashCollections()
+    override fun onFragmentSelected() {
+        appBarUnsplashCollections?.setExpanded(true)
+        rvPhotos?.scrollToPosition(0)
     }
 
     private fun observeData() {
