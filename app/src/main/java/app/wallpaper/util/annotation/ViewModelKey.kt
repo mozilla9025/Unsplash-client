@@ -1,4 +1,4 @@
-package app.wallpaper.di
+package app.wallpaper.util.annotation
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey

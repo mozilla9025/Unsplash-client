@@ -1,6 +1,6 @@
 package app.wallpaper.network.responses
 
-interface ApiResponse<T> {
+interface ApiResponse<out T> {
 
     fun loading(): T
 

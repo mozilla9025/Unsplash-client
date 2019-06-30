@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import app.wallpaper.modules.collections.CollectionsViewModel
 import app.wallpaper.modules.home.HomeViewModel
 import app.wallpaper.modules.photo.PhotoDetailsViewModel
+import app.wallpaper.util.annotation.ViewModelKey
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

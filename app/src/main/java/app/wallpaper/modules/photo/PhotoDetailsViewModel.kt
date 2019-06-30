@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import app.wallpaper.domain.data.Photo
 import app.wallpaper.domain.usecase.GetPhotosUseCase
 import app.wallpaper.modules.base.BaseViewModel
-import app.wallpaper.network.responses.PhotoListResponse
+import app.wallpaper.network.responses.Response
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.BiFunction
 import javax.inject.Inject
 
 class PhotoDetailsViewModel @Inject constructor(
@@ -16,15 +18,24 @@ class PhotoDetailsViewModel @Inject constructor(
 
     var photo: Photo? = null
 
-    val relatedPhotoLiveData: MutableLiveData<PhotoListResponse> by lazy {
-        MutableLiveData<PhotoListResponse>()
+    val photoLiveData: MutableLiveData<Response<Pair<Photo, List<Photo>>>> by lazy {
+        MutableLiveData<Response<Pair<Photo, List<Photo>>>>()
     }
 
-    fun getRelatedPhotos() {
-        add(getPhotosUseCase.getRelatedPhotos(photo?.id!!)
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { relatedPhotoLiveData.value = PhotoListResponse.loading() }
-                .subscribe({ relatedPhotoLiveData.value = PhotoListResponse.success(it) },
-                        { relatedPhotoLiveData.value = PhotoListResponse.failure(it) }))
+    fun updateInfo() {
+        photo?.let {
+            add(Observable.zip(
+                    getPhotosUseCase.getPhotoById(it.id).toObservable(),
+                    getPhotosUseCase.getRelatedPhotos(it.id),
+                    BiFunction<Photo, List<Photo>, Pair<Photo, List<Photo>>> { photo, relatedPhotos ->
+                        return@BiFunction Pair(photo, relatedPhotos)
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe { photoLiveData.value = Response.loading() }
+                    .subscribe({ pair ->
+                        photoLiveData.value = Response.success(pair)
+                        photo = pair.first
+                    }, { err -> photoLiveData.value = Response.failure(err) }))
+        }
     }
 }

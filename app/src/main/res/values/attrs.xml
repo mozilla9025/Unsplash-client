@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-     <declare-styleable name="ProgressCircle">
+    <declare-styleable name="ProgressCircle">
         <attr name="pgc_showProgress" format="boolean" />
         <attr name="pgc_indeterminate" format="boolean" />
         <attr name="pgc_textColor" format="color" />
@@ -8,5 +8,11 @@
         <attr name="pgc_progress" format="integer" />
         <attr name="pgc_rimWidth" format="reference|dimension|fraction" />
         <attr name="pgc_speed" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="IconTextView">
+        <attr name="itv_icon" format="reference" />
+        <attr name="itv_title" format="string" />
+        <attr name="itv_subtitle" format="string" />
     </declare-styleable>
 </resources>

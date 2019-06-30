@@ -9,7 +9,6 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class PhotoRepositoryImpl @Inject constructor(
@@ -20,12 +19,10 @@ class PhotoRepositoryImpl @Inject constructor(
 
     override fun getPhotos(page: Int, perPage: Int, order: Order): Observable<List<Photo>> {
         return photosApi.getPhotos(page, perPage, order.value)
-                .subscribeOn(Schedulers.io())
     }
 
     override fun getPhotoById(id: String): Single<Photo> {
         return photosApi.getPhotoById(id)
-                .subscribeOn(Schedulers.io())
     }
 
     override fun getRelatedPhotos(id: String): Observable<List<Photo>> {
@@ -42,6 +39,5 @@ class PhotoRepositoryImpl @Inject constructor(
 
     override fun getCollectionPhotos(collectionId: Int): Observable<List<Photo>> {
         return collectionApi.getCollectionPhotos(collectionId)
-                .subscribeOn(Schedulers.io())
     }
 }

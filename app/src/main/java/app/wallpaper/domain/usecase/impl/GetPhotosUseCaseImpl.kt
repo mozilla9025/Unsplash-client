@@ -12,10 +12,12 @@ import javax.inject.Inject
 class GetPhotosUseCaseImpl @Inject constructor(private val repository: PhotoRepository) : GetPhotosUseCase {
     override fun getPhotos(limit: Int, offset: Int, order: Order): Observable<List<Photo>> {
         return repository.getPhotos(limit, offset, order)
+                .subscribeOn(Schedulers.io())
     }
 
     override fun getPhotoById(id: String): Single<Photo> {
         return repository.getPhotoById(id)
+                .subscribeOn(Schedulers.io())
     }
 
     override fun getRelatedPhotos(id: String): Observable<List<Photo>> {
@@ -25,5 +27,6 @@ class GetPhotosUseCaseImpl @Inject constructor(private val repository: PhotoRepo
 
     override fun getCollectionPhotos(collectionId: Int): Observable<List<Photo>> {
         return repository.getCollectionPhotos(collectionId)
+                .subscribeOn(Schedulers.io())
     }
 }

@@ -57,14 +57,13 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:fadeScrollbars="false"
-        android:overScrollMode="ifContentScrolls"
-        android:scrollbarSize="@dimen/dp4"
-        android:scrollbarStyle="insideOverlay"
+        android:overScrollMode="never"
+        android:scrollbars="none"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -133,15 +132,97 @@
                     tools:text="\@name_surname" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvRelatedPhotos"
-                android:layout_width="@dimen/dp0"
+            <app.wallpaper.widget.progress.LoadingView
+                android:id="@+id/loadingViewInfo"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_marginTop="@dimen/dp24"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/clAuthor" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clInfo"
+                android:layout_width="@dimen/dp0"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clAuthor">
+
+                <app.wallpaper.widget.IconTextView
+                    android:id="@+id/itvLocation"
+                    android:layout_width="@dimen/dp0"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/dp12"
+                    android:paddingTop="@dimen/dp8"
+                    android:paddingEnd="@dimen/dp12"
+                    android:paddingBottom="@dimen/dp8"
+                    app:itv_icon="@drawable/ic_location"
+                    app:itv_title="Location"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <app.wallpaper.widget.IconTextView
+                    android:id="@+id/itvDownloads"
+                    android:layout_width="@dimen/dp0"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/dp12"
+                    android:paddingTop="@dimen/dp8"
+                    android:paddingEnd="@dimen/dp12"
+                    android:paddingBottom="@dimen/dp8"
+                    app:itv_icon="@drawable/ic_download"
+                    app:itv_title="Downloads"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/itvLocation" />
+
+                <app.wallpaper.widget.IconTextView
+                    android:id="@+id/itvLikes"
+                    android:layout_width="@dimen/dp0"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/dp12"
+                    android:paddingTop="@dimen/dp8"
+                    android:paddingEnd="@dimen/dp12"
+                    android:paddingBottom="@dimen/dp8"
+                    app:itv_icon="@drawable/ic_hearth"
+                    app:itv_title="Likes"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/itvDownloads" />
+
+                <TextView
+                    android:id="@+id/tvRvTitle"
+                    android:layout_width="@dimen/dp0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp12"
+                    android:layout_marginTop="@dimen/dp12"
+                    android:fontFamily="@font/open_sans"
+                    android:includeFontPadding="false"
+                    android:text="Related photos"
+                    android:textColor="@color/darkGray"
+                    android:textSize="@dimen/sp14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/itvLikes" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvRelatedPhotos"
+                    android:layout_width="@dimen/dp0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp12"
+                    android:background="@color/transparent"
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:overScrollMode="never"
+                    android:paddingBottom="@dimen/dp2"
+                    android:scrollbars="none"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvRvTitle" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
