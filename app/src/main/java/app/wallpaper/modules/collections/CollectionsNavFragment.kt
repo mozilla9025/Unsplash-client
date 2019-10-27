@@ -6,11 +6,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.FragmentNavigator
 import app.wallpaper.R
-import app.wallpaper.modules.base.SelectableFragment
+import app.wallpaper.modules.base.BaseFragment
 import app.wallpaper.util.annotation.Layout
 
 @Layout(R.layout.fragment_nav_collections)
-class CollectionsNavFragment : SelectableFragment() {
+class CollectionsNavFragment : BaseFragment() {
 
     private var navHostFragment: Fragment? = null
 
@@ -19,19 +19,12 @@ class CollectionsNavFragment : SelectableFragment() {
         val navController = Navigation.findNavController(navHostFragment!!.view!!)
 
         val navigator = FragmentNavigator(
-                context!!,
-                navHostFragment!!.childFragmentManager,
-                R.id.collections_nav_host
+            context!!,
+            navHostFragment!!.childFragmentManager,
+            R.id.collections_nav_host
         )
 
         navController.navigatorProvider.addNavigator(navigator)
         navController.setGraph(R.navigation.nav_collections)
-    }
-
-    override fun onFragmentSelected() {
-        navHostFragment?.childFragmentManager?.fragments!!.forEach {
-            if (it is SelectableFragment)
-                it.onFragmentSelected()
-        }
     }
 }

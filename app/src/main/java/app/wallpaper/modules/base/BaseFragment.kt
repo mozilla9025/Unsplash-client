@@ -5,16 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import app.wallpaper.util.annotation.Layout
 import app.wallpaper.util.extentions.logd
+import dagger.android.support.DaggerFragment
 import kotlin.reflect.full.findAnnotation
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : DaggerFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    protected val navController by lazy {
+        view!!.findNavController()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         this::class.findAnnotation<Layout>()?.let {
             return inflater.inflate(it.layout, container, false)
         } ?: throw IllegalStateException("Not annotated fragment ${this::class}")

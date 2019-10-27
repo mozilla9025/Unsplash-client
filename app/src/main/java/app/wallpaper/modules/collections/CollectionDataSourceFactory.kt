@@ -7,8 +7,10 @@ import app.wallpaper.domain.usecase.GetCollectionsUseCase
 import app.wallpaper.modules.collections.CollectionDataSource
 import io.reactivex.disposables.CompositeDisposable
 
-class CollectionDataSourceFactory(private val compositeDisposable: CompositeDisposable,
-                                  private val getCollectionsUseCase: GetCollectionsUseCase) : DataSource.Factory<Int, PhotoCollection>() {
+class CollectionDataSourceFactory(
+    private val compositeDisposable: CompositeDisposable,
+    private val getCollectionsUseCase: GetCollectionsUseCase
+) : DataSource.Factory<Int, PhotoCollection>() {
 
     val dataSourceLiveData = MutableLiveData<CollectionDataSource>()
 

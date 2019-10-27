@@ -5,35 +5,29 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import app.wallpaper.R
 import app.wallpaper.app.GlideApp
 import app.wallpaper.domain.data.Photo
-import app.wallpaper.modules.base.BaseFragment
+import app.wallpaper.modules.base.BaseViewModelFragment
 import app.wallpaper.modules.home.RelatedPhotosAdapter
 import app.wallpaper.network.responses.Response
 import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.annotation.Layout
+import app.wallpaper.util.annotation.ViewModel
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.extentions.getLinkName
 import app.wallpaper.util.extentions.loge
 import app.wallpaper.util.recycler.GridItemDecoration
-import app.wallpaper.widget.progress.LoadingView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_photo.*
-import javax.inject.Inject
 
 @Layout(R.layout.fragment_photo)
-class PhotoFragment : BaseFragment() {
-
-    @Inject
-    lateinit var viewModel: PhotoDetailsViewModel
+@ViewModel(PhotoDetailsViewModel::class)
+class PhotoFragment : BaseViewModelFragment<PhotoDetailsViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AndroidSupportInjection.inject(this)
         arguments?.let {
             viewModel.photo = PhotoFragmentArgs.fromBundle(it).photo
         }
@@ -52,10 +46,10 @@ class PhotoFragment : BaseFragment() {
             ivPhoto.layoutParams = params
 
             GlideApp.with(this)
-                    .load(it.urls?.regular!!)
-                    .placeholder(ColorDrawable(Color.parseColor(it.color)))
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(ivPhoto)
+                .load(it.urls?.regular!!)
+                .placeholder(ColorDrawable(Color.parseColor(it.color)))
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(ivPhoto)
         }
 
         setUpAuthor()
@@ -64,7 +58,7 @@ class PhotoFragment : BaseFragment() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        Navigation.findNavController(view!!).navigateUp()
+        navController.navigateUp()
     }
 
     private fun observeData() {
@@ -83,8 +77,8 @@ class PhotoFragment : BaseFragment() {
                 }
 
                 GlideApp.with(this)
-                        .load(user.avatar?.medium)
-                        .into(ivAvatar)
+                    .load(user.avatar?.medium)
+                    .into(ivAvatar)
             }
         }
     }
@@ -120,12 +114,9 @@ class PhotoFragment : BaseFragment() {
             }
             ResponseStatus.FAILURE -> {
                 clInfo.visibility = View.GONE
-                loadingViewInfo.onError(getString(R.string.Api_Call_Default_Error_Message),
-                        object : LoadingView.OnRetryClickListener {
-                            override fun onRetryClicked() {
-                                viewModel.updateInfo()
-                            }
-                        })
+                loadingViewInfo.onError(
+                    getString(R.string.Api_Call_Default_Error_Message)
+                ) { viewModel.updateInfo() }
                 response.error?.let { loge("err", it) }
             }
         }

@@ -7,7 +7,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import app.wallpaper.R
 import app.wallpaper.modules.base.BaseFragment
-import app.wallpaper.modules.base.SelectableFragment
 import app.wallpaper.util.annotation.Layout
 import app.wallpaper.util.navigation.KeepStateNavigator
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -28,10 +27,7 @@ class MainNavFragment : BaseFragment() {
 
         navigator.currentFragmentListener = object : KeepStateNavigator.CurrentFragmentListener {
             override fun onCurrentFragmentSelected(selectedFragment: Fragment) {
-                navHostFragment.childFragmentManager.fragments.forEach {
-                    if (it == selectedFragment && it is SelectableFragment)
-                        it.onFragmentSelected()
-                }
+
             }
         }
 

@@ -15,6 +15,8 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>>() {
         notifyDataSetChanged()
     }
 
+    fun isNullOrEmpty() = data?.isNullOrEmpty() ?: false
+
     protected fun add(item: T) {}
     protected fun remove(item: T) {}
 }

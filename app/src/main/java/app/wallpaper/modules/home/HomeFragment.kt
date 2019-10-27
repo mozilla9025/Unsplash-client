@@ -3,37 +3,31 @@ package app.wallpaper.modules.home
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
 import app.wallpaper.domain.data.Photo
-import app.wallpaper.modules.base.SelectableFragment
+import app.wallpaper.modules.base.BaseViewModelFragment
 import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.CollectionResponse
 import app.wallpaper.network.responses.PagingResponse
 import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.annotation.Layout
+import app.wallpaper.util.annotation.ViewModel
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.recycler.MarginItemDecoration
 import app.wallpaper.widget.ClickListener
-import app.wallpaper.widget.progress.LoadingView
-import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_home.*
-import javax.inject.Inject
 
 @Layout(R.layout.fragment_home)
-class HomeFragment : SelectableFragment() {
+@ViewModel(HomeViewModel::class)
+class HomeFragment : BaseViewModelFragment<HomeViewModel>() {
 
     private lateinit var photoAdapter: PhotoAdapter
     private lateinit var collectionAdapter: UnsplashCollectionAdapter
 
-    @Inject
-    lateinit var viewModel: HomeViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AndroidSupportInjection.inject(this)
         viewModel.getUnsplashCollections()
     }
 
@@ -46,8 +40,11 @@ class HomeFragment : SelectableFragment() {
 
         photoAdapter.clickListener = object : ClickListener<Photo> {
             override fun onItemClick(item: Photo) {
-                view.findNavController()
-                        .navigate(HomeFragmentDirections.actionHomeFragmentToPhotoDetailsFragment(item))
+                navController.navigate(
+                    HomeFragmentDirections.actionHomeFragmentToPhotoDetailsFragment(
+                        item
+                    )
+                )
             }
         }
 
@@ -58,24 +55,26 @@ class HomeFragment : SelectableFragment() {
 
         collectionAdapter = UnsplashCollectionAdapter()
         rvUnsplashCollections.adapter = collectionAdapter
-        rvUnsplashCollections.layoutManager = LinearLayoutManager(context!!, RecyclerView.HORIZONTAL, false)
-        rvUnsplashCollections.addItemDecoration(MarginItemDecoration(0.dp, 4.dp, RecyclerView.HORIZONTAL))
+        rvUnsplashCollections.layoutManager =
+            LinearLayoutManager(context!!, RecyclerView.HORIZONTAL, false)
+        rvUnsplashCollections.addItemDecoration(
+            MarginItemDecoration(
+                0.dp,
+                4.dp,
+                RecyclerView.HORIZONTAL
+            )
+        )
 
         observeData()
     }
 
-    override fun onFragmentSelected() {
-        appBarUnsplashCollections?.setExpanded(true)
-        rvPhotos?.scrollToPosition(0)
-    }
-
     private fun observeData() {
-        viewModel.collectionsLiveData.observe(viewLifecycleOwner, Observer { handleCollectionsLoad(it) })
-        viewModel.getInitialLoadState().observe(viewLifecycleOwner, Observer { handleInitialLoad(it) })
-        viewModel.getRangeLoadState().observe(viewLifecycleOwner, Observer { handleRangeLoad(it) })
-        viewModel.data.observe(viewLifecycleOwner, Observer {
-            photoAdapter.submitList(it)
-        })
+        with(viewModel) {
+            collectionsLiveData.observe(viewLifecycleOwner, Observer { handleCollectionsLoad(it) })
+            data.observe(viewLifecycleOwner, Observer { photoAdapter.submitList(it) })
+            getInitialLoadState().observe(viewLifecycleOwner, Observer { handleInitialLoad(it) })
+            getRangeLoadState().observe(viewLifecycleOwner, Observer { handleRangeLoad(it) })
+        }
     }
 
     private fun handleRangeLoad(response: PagingResponse) {
@@ -92,12 +91,10 @@ class HomeFragment : SelectableFragment() {
             ResponseStatus.FAILURE -> {
                 if (srlHome.isRefreshing) srlHome.isRefreshing = false
                 rvPhotos.visibility = View.GONE
-                loadingHome.onError(response.error?.message
-                        ?: getString(R.string.Api_Call_Default_Error_Message), object : LoadingView.OnRetryClickListener {
-                    override fun onRetryClicked() {
-                        viewModel.retry()
-                    }
-                })
+                loadingHome.onError(
+                    response.error?.message
+                        ?: getString(R.string.Api_Call_Default_Error_Message)
+                ) { viewModel.retry() }
             }
             ResponseStatus.LOADING -> {
                 if (photoAdapter.currentList == null || photoAdapter.currentList!!.isEmpty()) {

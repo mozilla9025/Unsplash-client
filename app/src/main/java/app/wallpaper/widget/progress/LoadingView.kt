@@ -8,25 +8,28 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import app.wallpaper.R
 import kotlinx.android.synthetic.main.view_loading.view.*
 
-class LoadingView @JvmOverloads constructor(context: Context,
-                                            attrs: AttributeSet? = null,
-                                            defStyle: Int = 0) : ConstraintLayout(context, attrs, defStyle) {
+class LoadingView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : ConstraintLayout(context, attrs, defStyle) {
 
     init {
         LayoutInflater.from(context)
-                .inflate(R.layout.view_loading, this, true)
+            .inflate(R.layout.view_loading, this, true)
     }
 
-    fun onError(error: String, retryClickListener: OnRetryClickListener?) {
+    fun onError(error: String, onRetry: (() -> Unit)? = null) {
         tv_error.text = error
         progress_view.visibility = View.GONE
         tv_error.visibility = View.VISIBLE
-        if (retryClickListener != null) {
+        onRetry?.let { retry ->
             btn_retry.visibility = View.VISIBLE
-            btn_retry.setOnClickListener { retryClickListener.onRetryClicked() }
-        } else {
+            btn_retry.setOnClickListener { retry.invoke() }
+        } ?: run {
             btn_retry.visibility = View.GONE
         }
+
         visibility = View.VISIBLE
     }
 
@@ -39,9 +42,5 @@ class LoadingView @JvmOverloads constructor(context: Context,
 
     fun onSuccess() {
         visibility = View.GONE
-    }
-
-    interface OnRetryClickListener {
-        fun onRetryClicked()
     }
 }

@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Unsplash-client.iml" filepath="$PROJECT_DIR$/Unsplash-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/Unsplash-client-app.iml" filepath="$PROJECT_DIR$/app/Unsplash-client-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/UnsplashClient.iml" filepath="$PROJECT_DIR$/UnsplashClient.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

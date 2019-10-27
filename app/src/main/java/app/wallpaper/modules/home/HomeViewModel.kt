@@ -1,6 +1,5 @@
 package app.wallpaper.modules.home
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -17,10 +16,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
-        application: Application,
-        getPhotosUseCase: GetPhotosUseCase,
-        private val getUnsplashCollectionsUseCase: GetUnsplashCollectionsUseCase
-) : BaseViewModel(application), Refreshable {
+    getPhotosUseCase: GetPhotosUseCase,
+    private val getUnsplashCollectionsUseCase: GetUnsplashCollectionsUseCase
+) : BaseViewModel(), Refreshable {
 
     internal var data: LiveData<PagedList<Photo>>
     internal val collectionsLiveData: MutableLiveData<CollectionResponse> by lazy {
@@ -51,16 +49,24 @@ class HomeViewModel @Inject constructor(
     }
 
     internal fun getInitialLoadState(): LiveData<PagingResponse> =
-            Transformations.switchMap<PhotoDataSource, PagingResponse>(dataSourceFactory.dataSourceLiveData, PhotoDataSource::initialLoad)
+        Transformations.switchMap<PhotoDataSource, PagingResponse>(
+            dataSourceFactory.dataSourceLiveData,
+            PhotoDataSource::initialLoad
+        )
 
     internal fun getRangeLoadState(): LiveData<PagingResponse> =
-            Transformations.switchMap<PhotoDataSource, PagingResponse>(dataSourceFactory.dataSourceLiveData, PhotoDataSource::rangeLoad)
+        Transformations.switchMap<PhotoDataSource, PagingResponse>(
+            dataSourceFactory.dataSourceLiveData,
+            PhotoDataSource::rangeLoad
+        )
 
     internal fun getUnsplashCollections() {
         add(getUnsplashCollectionsUseCase.getCollections(1, Int.MAX_VALUE)
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { collectionsLiveData.value = CollectionResponse.loading() }
-                .subscribe({ response -> collectionsLiveData.value = CollectionResponse.success(response) },
-                        { error -> collectionsLiveData.value = CollectionResponse.failure(error) }))
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { collectionsLiveData.value = CollectionResponse.loading() }
+            .subscribe({ response ->
+                collectionsLiveData.value = CollectionResponse.success(response)
+            }, { error -> collectionsLiveData.value = CollectionResponse.failure(error) })
+        )
     }
 }

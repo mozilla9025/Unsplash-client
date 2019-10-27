@@ -11,8 +11,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
 
-class CollectionDataSource(private val disposable: CompositeDisposable,
-                           private val getCollectionUseCase: GetCollectionsUseCase) : PageKeyedDataSource<Int, PhotoCollection>() {
+class CollectionDataSource(
+    private val disposable: CompositeDisposable,
+    private val getCollectionUseCase: GetCollectionsUseCase
+) : PageKeyedDataSource<Int, PhotoCollection>() {
 
     private var retryCompletable: Completable? = null
 
@@ -26,9 +28,9 @@ class CollectionDataSource(private val disposable: CompositeDisposable,
     fun retry() {
         if (retryCompletable != null) {
             disposable.add(retryCompletable!!
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { })
         }
     }
 
@@ -44,29 +46,34 @@ class CollectionDataSource(private val disposable: CompositeDisposable,
         }
     }
 
-    override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, PhotoCollection>) {
+    override fun loadInitial(
+        params: LoadInitialParams<Int>,
+        callback: LoadInitialCallback<Int, PhotoCollection>
+    ) {
         val currPage = 1
         disposable.add(getCollectionUseCase.getCollections(currPage, params.requestedLoadSize)
-                .doOnSubscribe { initialLoad.postValue(PagingResponse.loading()) }
-                .subscribe({ response ->
-                    callback.onResult(response, null, currPage + 1)
-                    initialLoad.postValue(PagingResponse.success())
-                }, { error ->
-                    initialLoad.postValue(PagingResponse.failure(error))
-                    setRetry(Action { loadInitial(params, callback) })
-                }))
+            .doOnSubscribe { initialLoad.postValue(PagingResponse.loading()) }
+            .subscribe({ response ->
+                callback.onResult(response, null, currPage + 1)
+                initialLoad.postValue(PagingResponse.success())
+            }, { error ->
+                initialLoad.postValue(PagingResponse.failure(error))
+                setRetry(Action { loadInitial(params, callback) })
+            })
+        )
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, PhotoCollection>) {
         disposable.add(getCollectionUseCase.getCollections(params.key, params.requestedLoadSize)
-                .doOnSubscribe { rangeLoad.postValue(PagingResponse.loading()) }
-                .subscribe({ response ->
-                    rangeLoad.postValue(PagingResponse.success())
-                    callback.onResult(response, params.key + 1)
-                }, { error ->
-                    rangeLoad.postValue(PagingResponse.failure(error))
-                    setRetry(Action { loadAfter(params, callback) })
-                }))
+            .doOnSubscribe { rangeLoad.postValue(PagingResponse.loading()) }
+            .subscribe({ response ->
+                rangeLoad.postValue(PagingResponse.success())
+                callback.onResult(response, params.key + 1)
+            }, { error ->
+                rangeLoad.postValue(PagingResponse.failure(error))
+                setRetry(Action { loadAfter(params, callback) })
+            })
+        )
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, PhotoCollection>) {

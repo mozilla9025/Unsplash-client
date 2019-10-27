@@ -1,11 +1,11 @@
 package app.wallpaper.modules.base
 
-import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import app.wallpaper.app.ApplicationLoader
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseViewModel(application: Application) : AndroidViewModel(application) {
+abstract class BaseViewModel : AndroidViewModel(ApplicationLoader.get()) {
 
     protected val disposables: CompositeDisposable = CompositeDisposable()
 

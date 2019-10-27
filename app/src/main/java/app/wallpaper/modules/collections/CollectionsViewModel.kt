@@ -1,6 +1,5 @@
 package app.wallpaper.modules.collections
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.LivePagedListBuilder
@@ -14,30 +13,35 @@ import app.wallpaper.network.responses.PagingResponse
 import javax.inject.Inject
 
 class CollectionsViewModel @Inject constructor(
-        application: Application,
-        getCollectionsUseCase: GetCollectionsUseCase
-) : BaseViewModel(application), Refreshable {
+    getCollectionsUseCase: GetCollectionsUseCase
+) : BaseViewModel(), Refreshable {
 
     internal var data: LiveData<PagedList<PhotoCollection>>
     private var dataSourceFactory: CollectionDataSourceFactory
 
     init {
         val config = PagedList.Config.Builder()
-                .setPageSize(10)
-                .setPrefetchDistance(10)
-                .setInitialLoadSizeHint(10)
-                .setEnablePlaceholders(false)
-                .build()
+            .setPageSize(10)
+            .setPrefetchDistance(10)
+            .setInitialLoadSizeHint(10)
+            .setEnablePlaceholders(false)
+            .build()
 
         dataSourceFactory = CollectionDataSourceFactory(disposables, getCollectionsUseCase)
         data = LivePagedListBuilder<Int, PhotoCollection>(dataSourceFactory, config).build()
     }
 
     internal fun getInitialLoadState(): LiveData<PagingResponse> =
-            Transformations.switchMap<CollectionDataSource, PagingResponse>(dataSourceFactory.dataSourceLiveData, CollectionDataSource::initialLoad)
+        Transformations.switchMap<CollectionDataSource, PagingResponse>(
+            dataSourceFactory.dataSourceLiveData,
+            CollectionDataSource::initialLoad
+        )
 
     internal fun getRangeLoadState(): LiveData<PagingResponse> =
-            Transformations.switchMap<CollectionDataSource, PagingResponse>(dataSourceFactory.dataSourceLiveData, CollectionDataSource::rangeLoad)
+        Transformations.switchMap<CollectionDataSource, PagingResponse>(
+            dataSourceFactory.dataSourceLiveData,
+            CollectionDataSource::rangeLoad
+        )
 
     override fun retry() {
         dataSourceFactory.dataSourceLiveData.value?.retry()

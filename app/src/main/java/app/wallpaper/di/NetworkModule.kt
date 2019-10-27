@@ -14,6 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 @Module
 class NetworkModule {
@@ -26,32 +27,34 @@ class NetworkModule {
 
     @Provides
     fun provideOkHttpClient(cache: Cache): OkHttpClient {
-        val client = OkHttpClient.Builder()
-        client.connectTimeout(30, TimeUnit.SECONDS)
+        return OkHttpClient.Builder().apply {
+            connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(1, TimeUnit.MINUTES)
                 .writeTimeout(1, TimeUnit.MINUTES)
 
-        client.addInterceptor(HeaderInterceptor(BuildConfig.ApiKey))
+            addInterceptor(HeaderInterceptor(BuildConfig.ApiKey))
 
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            )
 
-        client.addInterceptor(loggingInterceptor)
-
-        client.cache(cache)
-        return client.build()
+            cache(cache)
+        }.build()
     }
 
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build()
+            .baseUrl(Constants.BASE_URL)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
     }
 
     @Provides
+    @Singleton
     fun provideGson(): Gson = Gson()
 }

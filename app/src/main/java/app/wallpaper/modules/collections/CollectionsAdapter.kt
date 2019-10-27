@@ -18,17 +18,25 @@ import kotlinx.android.synthetic.main.include_collection_name.view.*
 import kotlinx.android.synthetic.main.item_collection.view.*
 import kotlinx.android.synthetic.main.item_collection_album.view.*
 
-class CollectionsAdapter(private var retryCallback: Retryable) : PagedListAdapter<PhotoCollection, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
+class CollectionsAdapter(
+    private var retryCallback: Retryable
+) : PagedListAdapter<PhotoCollection, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     private var response: ResponseStatus = ResponseStatus.SUCCESS
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PhotoCollection>() {
-            override fun areItemsTheSame(oldItem: PhotoCollection, newItem: PhotoCollection): Boolean {
+            override fun areItemsTheSame(
+                oldItem: PhotoCollection,
+                newItem: PhotoCollection
+            ): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: PhotoCollection, newItem: PhotoCollection): Boolean {
+            override fun areContentsTheSame(
+                oldItem: PhotoCollection,
+                newItem: PhotoCollection
+            ): Boolean {
                 return oldItem.id == newItem.id
             }
         }
@@ -60,10 +68,14 @@ class CollectionsAdapter(private var retryCallback: Retryable) : PagedListAdapte
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            MULTIPLE_IMAGES -> CollectionViewHolder(LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_collection_album, parent, false), viewType)
-            SINGLE_IMAGE -> CollectionViewHolder(LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_collection, parent, false), viewType)
+            MULTIPLE_IMAGES -> CollectionViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_collection_album, parent, false), viewType
+            )
+            SINGLE_IMAGE -> CollectionViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_collection, parent, false), viewType
+            )
             LOADING_FOOTER -> PagingFooterViewHolder.create(parent, retryCallback)
             else -> throw IllegalStateException("No matching view holder for type $viewType")
         }
@@ -97,7 +109,8 @@ class CollectionsAdapter(private var retryCallback: Retryable) : PagedListAdapte
         }
     }
 
-    inner class CollectionViewHolder(itemView: View, private var viewType: Int) : BaseViewHolder<PhotoCollection>(itemView) {
+    inner class CollectionViewHolder(itemView: View, private var viewType: Int) :
+        BaseViewHolder<PhotoCollection>(itemView) {
 
         override fun bind(item: PhotoCollection) {
 
@@ -107,32 +120,34 @@ class CollectionsAdapter(private var retryCallback: Retryable) : PagedListAdapte
             }
 
             itemView.tv_collection_name.text = item.title
-            itemView.tv_count_and_author.text = String.format(itemView.context.getString(R.string.CollectionsAdapter_Count_and_Author_format),
-                    item.totalPhotos.toString(), item.user.name)
+            itemView.tv_count_and_author.text = String.format(
+                itemView.context.getString(R.string.CollectionsAdapter_Count_and_Author_format),
+                item.totalPhotos.toString(), item.user.name
+            )
         }
 
         private fun bindSingleImage(item: PhotoCollection) {
             GlideApp.with(itemView)
-                    .load(item.coverPhoto.urls?.regular)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(itemView.iv_cover)
+                .load(item.coverPhoto.urls?.regular)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(itemView.iv_cover)
         }
 
         private fun bindMultipleImages(item: PhotoCollection) {
             GlideApp.with(itemView)
-                    .load(item.previews[0].urls?.regular)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(itemView.iv_preview1)
+                .load(item.previews[0].urls?.regular)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(itemView.iv_preview1)
 
             GlideApp.with(itemView)
-                    .load(item.previews[1].urls?.regular)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(itemView.iv_preview2)
+                .load(item.previews[1].urls?.regular)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(itemView.iv_preview2)
 
             GlideApp.with(itemView)
-                    .load(item.previews[2].urls?.regular)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(itemView.iv_preview3)
+                .load(item.previews[2].urls?.regular)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(itemView.iv_preview3)
         }
     }
 }
