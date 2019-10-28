@@ -19,9 +19,9 @@ class CollectionsNavFragment : BaseFragment() {
         val navController = Navigation.findNavController(navHostFragment!!.view!!)
 
         val navigator = FragmentNavigator(
-            context!!,
-            navHostFragment!!.childFragmentManager,
-            R.id.collections_nav_host
+                context!!,
+                navHostFragment!!.childFragmentManager,
+                R.id.collections_nav_host
         )
 
         navController.navigatorProvider.addNavigator(navigator)
