@@ -20,5 +20,5 @@ data class Photo(
         @SerializedName("exif") val exif: Exif?,
         @SerializedName("location") val location: Location?,
         @SerializedName("user") val user: User?,
-        @SerializedName("urls") val urls: PhotoUrls?
+        @SerializedName("urls") val urls: PhotoUrls
 ) : Parcelable

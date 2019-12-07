@@ -3,6 +3,7 @@ package app.wallpaper.modules.home
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
@@ -12,19 +13,25 @@ import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.CollectionResponse
 import app.wallpaper.network.responses.PagingResponse
 import app.wallpaper.network.responses.ResponseStatus
-import app.wallpaper.util.annotation.Layout
 import app.wallpaper.util.annotation.ViewModel
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.recycler.MarginItemDecoration
 import app.wallpaper.widget.ClickListener
 import kotlinx.android.synthetic.main.fragment_home.*
 
-@Layout(R.layout.fragment_home)
 @ViewModel(HomeViewModel::class)
-class HomeFragment : BaseViewModelFragment<HomeViewModel>() {
+class HomeFragment : BaseViewModelFragment<HomeViewModel>(R.layout.fragment_home) {
 
-    private lateinit var photoAdapter: PhotoAdapter
-    private lateinit var collectionAdapter: UnsplashCollectionAdapter
+    private val photoAdapter: PhotoAdapter by lazy {
+        PhotoAdapter(object : Retryable {
+            override fun retry() {
+                viewModel.retry()
+            }
+        })
+    }
+    private val collectionAdapter: UnsplashCollectionAdapter by lazy {
+        UnsplashCollectionAdapter()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,38 +39,20 @@ class HomeFragment : BaseViewModelFragment<HomeViewModel>() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        photoAdapter = PhotoAdapter(object : Retryable {
-            override fun retry() {
-                viewModel.retry()
-            }
-        })
-
         photoAdapter.clickListener = object : ClickListener<Photo> {
             override fun onItemClick(item: Photo) {
-                navController.navigate(
-                    HomeFragmentDirections.actionHomeFragmentToPhotoDetailsFragment(
-                        item
-                    )
-                )
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToPhotoDetailsFragment(item))
             }
         }
 
         srlHome.setOnRefreshListener { viewModel.refresh() }
         rvPhotos.adapter = photoAdapter
-        rvPhotos.layoutManager = LinearLayoutManager(context!!, RecyclerView.VERTICAL, false)
+        rvPhotos.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         rvPhotos.addItemDecoration(MarginItemDecoration(4.dp, 0.dp, RecyclerView.VERTICAL))
 
-        collectionAdapter = UnsplashCollectionAdapter()
         rvUnsplashCollections.adapter = collectionAdapter
-        rvUnsplashCollections.layoutManager =
-            LinearLayoutManager(context!!, RecyclerView.HORIZONTAL, false)
-        rvUnsplashCollections.addItemDecoration(
-            MarginItemDecoration(
-                0.dp,
-                4.dp,
-                RecyclerView.HORIZONTAL
-            )
-        )
+        rvUnsplashCollections.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        rvUnsplashCollections.addItemDecoration(MarginItemDecoration(0.dp, 4.dp, RecyclerView.HORIZONTAL))
 
         observeData()
     }
@@ -91,8 +80,7 @@ class HomeFragment : BaseViewModelFragment<HomeViewModel>() {
             ResponseStatus.FAILURE -> {
                 if (srlHome.isRefreshing) srlHome.isRefreshing = false
                 rvPhotos.visibility = View.GONE
-                loadingHome.onError(
-                    response.error?.message
+                loadingHome.onError(response.error?.message
                         ?: getString(R.string.Api_Call_Default_Error_Message)
                 ) { viewModel.retry() }
             }

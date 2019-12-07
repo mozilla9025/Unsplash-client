@@ -13,7 +13,6 @@ import app.wallpaper.modules.base.BaseViewModelFragment
 import app.wallpaper.modules.home.RelatedPhotosAdapter
 import app.wallpaper.network.responses.Response
 import app.wallpaper.network.responses.ResponseStatus
-import app.wallpaper.util.annotation.Layout
 import app.wallpaper.util.annotation.ViewModel
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.extentions.getLinkName
@@ -22,43 +21,33 @@ import app.wallpaper.util.recycler.GridItemDecoration
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.fragment_photo.*
 
-@Layout(R.layout.fragment_photo)
 @ViewModel(PhotoDetailsViewModel::class)
-class PhotoFragment : BaseViewModelFragment<PhotoDetailsViewModel>() {
+class PhotoFragment : BaseViewModelFragment<PhotoDetailsViewModel>(R.layout.fragment_photo) {
+
+    private val decoration by lazy {
+        GridItemDecoration(2, 2.dp, false)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             viewModel.photo = PhotoFragmentArgs.fromBundle(it).photo
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
         viewModel.updateInfo()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.photo?.let {
-            val params = ivPhoto.layoutParams
-            val scaleFactor = params.width / it.width!!
-            params.height = scaleFactor * it.height!!
-            ivPhoto.layoutParams = params
-
             GlideApp.with(this)
-                .load(it.urls?.regular!!)
-                .placeholder(ColorDrawable(Color.parseColor(it.color)))
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(ivPhoto)
+                    .load(it.urls.regular)
+                    .centerCrop()
+                    .placeholder(ColorDrawable(Color.parseColor(it.color)))
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(ivPhoto)
         }
 
         setUpAuthor()
         observeData()
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        navController.navigateUp()
     }
 
     private fun observeData() {
@@ -77,13 +66,11 @@ class PhotoFragment : BaseViewModelFragment<PhotoDetailsViewModel>() {
                 }
 
                 GlideApp.with(this)
-                    .load(user.avatar?.medium)
-                    .into(ivAvatar)
+                        .load(user.avatar?.medium)
+                        .into(ivAvatar)
             }
         }
     }
-
-    val decoration = GridItemDecoration(2, 2.dp, false)
 
     private fun handleInfoUpdate(response: Response<Pair<Photo, List<Photo>>>?) {
         when (response?.status) {
@@ -115,7 +102,7 @@ class PhotoFragment : BaseViewModelFragment<PhotoDetailsViewModel>() {
             ResponseStatus.FAILURE -> {
                 clInfo.visibility = View.GONE
                 loadingViewInfo.onError(
-                    getString(R.string.Api_Call_Default_Error_Message)
+                        getString(R.string.Api_Call_Default_Error_Message)
                 ) { viewModel.updateInfo() }
                 response.error?.let { loge("err", it) }
             }

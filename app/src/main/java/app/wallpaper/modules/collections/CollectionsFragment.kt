@@ -10,15 +10,13 @@ import app.wallpaper.modules.base.BaseViewModelFragment
 import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.PagingResponse
 import app.wallpaper.network.responses.ResponseStatus
-import app.wallpaper.util.annotation.Layout
 import app.wallpaper.util.annotation.ViewModel
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.recycler.MarginItemDecoration
 import kotlinx.android.synthetic.main.fragment_collections.*
 
-@Layout(R.layout.fragment_collections)
 @ViewModel(CollectionsViewModel::class)
-class CollectionsFragment : BaseViewModelFragment<CollectionsViewModel>() {
+class CollectionsFragment : BaseViewModelFragment<CollectionsViewModel>(R.layout.fragment_collections) {
 
     private val adapter: CollectionsAdapter by lazy {
         CollectionsAdapter(object : Retryable {
@@ -42,8 +40,8 @@ class CollectionsFragment : BaseViewModelFragment<CollectionsViewModel>() {
     private fun observeData() {
         with(viewModel) {
             getInitialLoadState().observe(
-                viewLifecycleOwner,
-                Observer { handleInitialLoad(it) })
+                    viewLifecycleOwner,
+                    Observer { handleInitialLoad(it) })
             getRangeLoadState().observe(viewLifecycleOwner, Observer { handleRangeLoad(it) })
             data.observe(viewLifecycleOwner, Observer { adapter.submitList(it) })
         }
@@ -68,8 +66,8 @@ class CollectionsFragment : BaseViewModelFragment<CollectionsViewModel>() {
 
                 rvCollections.visibility = View.GONE
                 loadingCollections.onError(
-                    response.error?.message
-                        ?: getString(R.string.Api_Call_Default_Error_Message)
+                        response.error?.message
+                                ?: getString(R.string.Api_Call_Default_Error_Message)
                 ) { viewModel.retry() }
             }
             ResponseStatus.LOADING -> {

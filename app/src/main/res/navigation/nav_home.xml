@@ -23,7 +23,8 @@
         tools:layout="@layout/fragment_photo">
         <argument
             android:name="photo"
-            app:argType="app.wallpaper.domain.data.Photo" />
+            app:argType="app.wallpaper.domain.data.Photo"
+            app:nullable="false" />
     </fragment>
 
 </navigation>
