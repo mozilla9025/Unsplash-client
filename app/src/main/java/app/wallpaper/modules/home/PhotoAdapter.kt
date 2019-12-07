@@ -12,17 +12,17 @@ import app.wallpaper.R
 import app.wallpaper.app.GlideApp
 import app.wallpaper.domain.data.Photo
 import app.wallpaper.modules.base.BaseViewHolder
-import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.recycler.PagingFooterViewHolder
-import app.wallpaper.widget.ClickListener
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.item_photo.view.*
 
 
-class PhotoAdapter(private var retryCallback: Retryable) : PagedListAdapter<Photo, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
+class PhotoAdapter(
+        private var retryAction: () -> Unit,
+        private val clickListener: (Photo) -> Unit
+) : PagedListAdapter<Photo, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
-    var clickListener: ClickListener<Photo>? = null
     private var response: ResponseStatus = ResponseStatus.SUCCESS
 
     fun updateResponse(response: ResponseStatus) {
@@ -56,7 +56,7 @@ class PhotoAdapter(private var retryCallback: Retryable) : PagedListAdapter<Phot
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == PHOTO_ITEM) PhotoItemViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_photo, parent, false))
-        else PagingFooterViewHolder.create(parent, retryCallback)
+        else PagingFooterViewHolder.create(parent, retryAction)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -86,14 +86,14 @@ class PhotoAdapter(private var retryCallback: Retryable) : PagedListAdapter<Phot
     inner class PhotoItemViewHolder(itemView: View) : BaseViewHolder<Photo>(itemView) {
         override fun bind(item: Photo) {
 
-            itemView.setOnClickListener { clickListener?.onItemClick(item) }
+            itemView.setOnClickListener { clickListener.invoke(item) }
 
             GlideApp.with(itemView)
                     .load(item.user?.avatar?.medium)
                     .into(itemView.iv_avatar)
 
             GlideApp.with(itemView)
-                    .load(item.urls?.regular)
+                    .load(item.urls.regular)
                     .placeholder(ColorDrawable(Color.parseColor(item.color)))
                     .transition(DrawableTransitionOptions.withCrossFade(200))
                     .into(itemView.iv_image)

@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
 import app.wallpaper.modules.base.BaseViewModelFragment
-import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.PagingResponse
 import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.annotation.ViewModel
@@ -19,11 +18,7 @@ import kotlinx.android.synthetic.main.fragment_collections.*
 class CollectionsFragment : BaseViewModelFragment<CollectionsViewModel>(R.layout.fragment_collections) {
 
     private val adapter: CollectionsAdapter by lazy {
-        CollectionsAdapter(object : Retryable {
-            override fun retry() {
-                viewModel.retry()
-            }
-        })
+        CollectionsAdapter { viewModel.retry() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

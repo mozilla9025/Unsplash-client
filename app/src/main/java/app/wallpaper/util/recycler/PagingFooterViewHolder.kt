@@ -5,11 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import app.wallpaper.R
 import app.wallpaper.modules.base.BaseViewHolder
-import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.ResponseStatus
 import kotlinx.android.synthetic.main.item_loading_footer.view.*
 
-class PagingFooterViewHolder(itemView: View, private var retryCallback: Retryable?) : BaseViewHolder<ResponseStatus>(itemView) {
+class PagingFooterViewHolder(itemView: View, private val retryCallback: () -> Unit) : BaseViewHolder<ResponseStatus>(itemView) {
 
     override fun bind(item: ResponseStatus) {
         when (item) {
@@ -32,14 +31,15 @@ class PagingFooterViewHolder(itemView: View, private var retryCallback: Retryabl
                     itemView.btn_retry.visibility = View.GONE
                 } else {
                     itemView.btn_retry.visibility = View.VISIBLE
-                    itemView.btn_retry.setOnClickListener { retryCallback?.retry() }
+                    itemView.btn_retry.setOnClickListener { retryCallback.invoke() }
                 }
             }
         }
     }
 
     companion object {
-        fun create(parent: ViewGroup, retryCallback: Retryable?): PagingFooterViewHolder = PagingFooterViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_loading_footer, parent, false), retryCallback)
+        fun create(parent: ViewGroup, retry: () -> Unit): PagingFooterViewHolder =
+                PagingFooterViewHolder(LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_loading_footer, parent, false), retry)
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import app.wallpaper.R
 import app.wallpaper.app.GlideApp
@@ -82,7 +83,9 @@ class PhotoFragment : BaseViewModelFragment<PhotoDetailsViewModel>(R.layout.frag
                     rvRelatedPhotos.run {
                         visibility = View.VISIBLE
                         layoutManager = GridLayoutManager(context!!, 2)
-                        adapter = RelatedPhotosAdapter().apply {
+                        adapter = RelatedPhotosAdapter {
+                            findNavController().navigate(PhotoFragmentDirections.actionPhotoDetailsFragmentSelf(it))
+                        }.apply {
                             updateData(response.data.second)
                         }
                         removeItemDecoration(decoration)

@@ -2,7 +2,9 @@ package app.wallpaper.modules.base
 
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>>() {
+abstract class BaseAdapter<T>(
+        protected val clickListener: ((T) -> Unit)? = null
+) : RecyclerView.Adapter<BaseViewHolder<T>>() {
 
     var data: List<T>? = null
 

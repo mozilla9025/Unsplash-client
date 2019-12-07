@@ -91,46 +91,45 @@ fun BottomNavigationView.setupWithNavController(
             false
         } else {
             val newlySelectedItemTag = graphIdToTagMap[item.itemId]
-            if (selectedItemTag != newlySelectedItemTag) {
-                // Pop everything above the first fragment (the "fixed start destination")
-                fragmentManager.popBackStack(firstFragmentTag,
-                        FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                val selectedFragment = fragmentManager.findFragmentByTag(newlySelectedItemTag)
-                        as NavHostFragment
+            if (selectedItemTag == newlySelectedItemTag) {
+                return@setOnNavigationItemSelectedListener false
+            }
+            // Pop everything above the first fragment (the "fixed start destination")
+            fragmentManager.popBackStack(firstFragmentTag,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            val selectedFragment = fragmentManager.findFragmentByTag(newlySelectedItemTag)
+                    as NavHostFragment
 
-                // Exclude the first fragment tag because it's always in the back stack.
-                if (firstFragmentTag != newlySelectedItemTag) {
-                    // Commit a transaction that cleans the back stack and adds the first fragment
-                    // to it, creating the fixed started destination.
-                    fragmentManager.beginTransaction()
-                            .setCustomAnimations(
-                                    R.anim.nav_default_enter_anim,
-                                    R.anim.nav_default_exit_anim,
-                                    R.anim.nav_default_pop_enter_anim,
-                                    R.anim.nav_default_pop_exit_anim)
-                            .attach(selectedFragment)
-                            .setPrimaryNavigationFragment(selectedFragment)
-                            .apply {
-                                // Detach all other Fragments
-                                graphIdToTagMap.forEach { _, fragmentTagIter ->
-                                    if (fragmentTagIter != newlySelectedItemTag) {
-                                        fragmentManager.findFragmentByTag(firstFragmentTag)?.let {
-                                            detach(it)
-                                        }
+            // Exclude the first fragment tag because it's always in the back stack.
+            if (firstFragmentTag != newlySelectedItemTag) {
+                // Commit a transaction that cleans the back stack and adds the first fragment
+                // to it, creating the fixed started destination.
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                                R.anim.nav_default_enter_anim,
+                                R.anim.nav_default_exit_anim,
+                                R.anim.nav_default_pop_enter_anim,
+                                R.anim.nav_default_pop_exit_anim)
+                        .attach(selectedFragment)
+                        .setPrimaryNavigationFragment(selectedFragment)
+                        .apply {
+                            // Detach all other Fragments
+                            graphIdToTagMap.forEach { _, fragmentTagIter ->
+                                if (fragmentTagIter != newlySelectedItemTag) {
+                                    fragmentManager.findFragmentByTag(firstFragmentTag)?.let {
+                                        detach(it)
                                     }
                                 }
                             }
-                            .addToBackStack(firstFragmentTag)
-                            .setReorderingAllowed(true)
-                            .commit()
-                }
-                selectedItemTag = newlySelectedItemTag
-                isOnFirstFragment = selectedItemTag == firstFragmentTag
-                selectedNavController.value = selectedFragment.navController
-                true
-            } else {
-                false
+                        }
+                        .addToBackStack(firstFragmentTag)
+                        .setReorderingAllowed(true)
+                        .commit()
             }
+            selectedItemTag = newlySelectedItemTag
+            isOnFirstFragment = selectedItemTag == firstFragmentTag
+            selectedNavController.value = selectedFragment.navController
+            true
         }
     }
 
@@ -191,9 +190,7 @@ private fun BottomNavigationView.setupItemReselected(
                 as NavHostFragment
         val navController = selectedFragment.navController
         // Pop the back stack to the start destination of the current navController graph
-        navController.popBackStack(
-                navController.graph.startDestination, false
-        )
+        navController.popBackStack(navController.graph.startDestination, false)
     }
 }
 

@@ -13,13 +13,11 @@ import app.wallpaper.modules.base.BaseViewHolder
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.item_related_photo.view.*
 
-class RelatedPhotosAdapter : BaseAdapter<Photo>() {
+class RelatedPhotosAdapter(clickListener: (Photo) -> Unit) : BaseAdapter<Photo>(clickListener) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RelatedPhotoViewHolder {
-        return RelatedPhotoViewHolder(
-                LayoutInflater.from(parent.context!!)
-                        .inflate(R.layout.item_related_photo, parent, false)
-        )
+        return RelatedPhotoViewHolder(LayoutInflater.from(parent.context!!)
+                .inflate(R.layout.item_related_photo, parent, false))
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<Photo>, position: Int) {
@@ -29,9 +27,12 @@ class RelatedPhotosAdapter : BaseAdapter<Photo>() {
     }
 
     inner class RelatedPhotoViewHolder(itemView: View) : BaseViewHolder<Photo>(itemView) {
+
         override fun bind(item: Photo) {
+            itemView.setOnClickListener { clickListener!!.invoke(item) }
+
             GlideApp.with(itemView)
-                    .load(item.urls?.regular)
+                    .load(item.urls.regular)
                     .placeholder(ColorDrawable(Color.parseColor(item.color!!)))
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(itemView.ivRelated)

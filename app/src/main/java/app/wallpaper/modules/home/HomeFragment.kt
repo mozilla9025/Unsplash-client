@@ -7,26 +7,23 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.wallpaper.R
-import app.wallpaper.domain.data.Photo
 import app.wallpaper.modules.base.BaseViewModelFragment
-import app.wallpaper.network.Retryable
 import app.wallpaper.network.responses.CollectionResponse
 import app.wallpaper.network.responses.PagingResponse
 import app.wallpaper.network.responses.ResponseStatus
 import app.wallpaper.util.annotation.ViewModel
 import app.wallpaper.util.extentions.dp
 import app.wallpaper.util.recycler.MarginItemDecoration
-import app.wallpaper.widget.ClickListener
 import kotlinx.android.synthetic.main.fragment_home.*
 
 @ViewModel(HomeViewModel::class)
 class HomeFragment : BaseViewModelFragment<HomeViewModel>(R.layout.fragment_home) {
 
     private val photoAdapter: PhotoAdapter by lazy {
-        PhotoAdapter(object : Retryable {
-            override fun retry() {
-                viewModel.retry()
-            }
+        PhotoAdapter({
+            viewModel.retry()
+        }, {
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToPhotoDetailsFragment(it))
         })
     }
     private val collectionAdapter: UnsplashCollectionAdapter by lazy {
@@ -39,12 +36,6 @@ class HomeFragment : BaseViewModelFragment<HomeViewModel>(R.layout.fragment_home
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        photoAdapter.clickListener = object : ClickListener<Photo> {
-            override fun onItemClick(item: Photo) {
-                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToPhotoDetailsFragment(item))
-            }
-        }
-
         srlHome.setOnRefreshListener { viewModel.refresh() }
         rvPhotos.adapter = photoAdapter
         rvPhotos.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)

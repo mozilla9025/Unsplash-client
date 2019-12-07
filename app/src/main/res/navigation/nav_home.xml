@@ -25,6 +25,10 @@
             android:name="photo"
             app:argType="app.wallpaper.domain.data.Photo"
             app:nullable="false" />
+        <action
+            android:id="@+id/action_photoDetailsFragment_self"
+            app:destination="@id/photoDetailsFragment"
+            app:popUpTo="@+id/photoDetailsFragment" />
     </fragment>
 
 </navigation>
